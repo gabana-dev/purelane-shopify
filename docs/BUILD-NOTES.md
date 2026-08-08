@@ -94,7 +94,7 @@ background sequence is wrong.
 The visible consequence was the hero rendering on white. Rather than leave that, the hero
 now owns its own gradient and overlay: identical output, no cross-section coupling.
 
-## Four bugs worth reporting on myself
+## Six bugs worth reporting on myself
 
 **An unterminated quote silently discarded the entire stylesheet.** When merging the two
 `:root` blocks my script split declarations on `;` — which also appears inside
@@ -133,6 +133,30 @@ every section, the rest return immediately.
 I found it by counting `IntersectionObserver.observe` calls after dispatching one
 `shopify:section:load` — 30 where there should have been 5. Reading the code would not have
 shown it, because the code is not where the bug lives.
+
+**The hero art has a different shape than the hero was designed for.** The prototype's
+bottles are CSS backgrounds on spans with a fixed `aspect-ratio:0.322` — tall, narrow art
+drawn for that stage. The brief requires the hero to render the merchant's own products, so
+ours are real `<img>` elements fed by `product.featured_image`, and the seeded art is
+257×394 — an aspect of 0.652, twice as wide per unit of height. Sizing purely by height, as
+the prototype does, made every bottle roughly double its intended width: the group overflowed
+the stage and the third bottle sat behind the promise badges.
+
+The fix is not to force the art back to 0.322, because the next merchant's photo will have
+its own aspect. Height still drives the stagger, each position also carries a width cap in
+proportion to that height (75 : 97 : 79), and the slide reserves the badge column above
+900px. All of it is a percentage of the stage, so it holds at every width instead of at the
+one it was checked on. This is the difference between porting a prototype and shipping a
+section: the prototype only had to work with the four images it shipped with.
+
+**The bundle ladder was inverted.** The prototype sells one bottle at ₹200/₹299, any two at
+₹349/₹598 (save ₹249) and any three at ₹499/₹897 (save ₹398). No seeded product matched the
+middle rung, so the hero's second slide borrowed the Laundry care set at ₹599 — which made
+two products cost more than three. The pricing was doing exactly what it should (reading
+`compare_at_price` off a real product); it was pointed at the wrong product. `seed.py` now
+creates the ₹349/₹598 bundle, `scripts/add_hero_bundle.py` adds just that product to a store
+that was already seeded, and the slide's price product is a theme-editor setting, so
+correcting it is a merchant action rather than a code change.
 
 ## Gaps — being straight about them
 
