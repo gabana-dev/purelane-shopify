@@ -1,0 +1,97 @@
+{% comment %}
+  Purelane — shop / product grid (prototype anchor #shop)
+
+  Products come from a collection the merchant picks, not from Liquid. Ratings, review
+  counts and badges come from metafields so a review app can populate them. The section
+  renders nothing but its heading if the collection is empty or unset, rather than
+  erroring — a merchant mid-setup should never see a broken page.
+{% endcomment %}
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show
+-%}
+
+<div class="pl">
+  <section
+    class="sec"
+    id="shop"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+    style="--pl-cols:{{ section.settings.columns_desktop }};--pl-cols-mobile:{{ section.settings.columns_mobile }};"
+  >
+    <div class="wrap">
+      <div class="panel-head rv">
+        {%- if section.settings.kicker != blank -%}
+          <span class="kicker">{{ section.settings.kicker }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        <div class="rule" aria-hidden="true">
+          <i></i>{% render 'purelane-icon', icon: 'leaf' %}<i></i>
+        </div>
+      </div>
+
+      {%- if collection.products.size > 0 -%}
+        <div class="shelf">
+          {%- for product in collection.products limit: limit -%}
+            {% render 'purelane-product-card',
+              product: product,
+              variant: 'shop',
+              index: forloop.index0,
+              show_rating: section.settings.show_rating,
+              show_badge: section.settings.show_badge,
+              heading_tag: 'h3'
+            %}
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        {%- comment -%} Only nag the merchant inside the editor, never on the live site. {%- endcomment -%}
+        <p class="lede">Pick a collection in the theme editor to show products here.</p>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane shop grid",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Bestsellers" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by 30,000 homes" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    {
+      "type": "range", "id": "products_to_show", "label": "Products to show",
+      "min": 2, "max": 24, "step": 1, "default": 8
+    },
+    {
+      "type": "range", "id": "columns_desktop", "label": "Columns on desktop",
+      "min": 2, "max": 5, "step": 1, "default": 4
+    },
+    {
+      "type": "select", "id": "columns_mobile", "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    { "type": "header", "content": "Card details" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show rating", "default": true },
+    {
+      "type": "checkbox", "id": "show_badge", "label": "Show badge",
+      "info": "Set each product's badge text in its metafield custom.badge",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "Purelane shop grid" }]
+}
+{% endschema %}

@@ -1,0 +1,210 @@
+{% comment %}
+  Purelane — hero (prototype anchor section.hero)
+
+  The headline is three stacked lines with the last one highlighted, so each line is its
+  own setting rather than one string with <br> tags a merchant would have to hand-write.
+
+  Promise badges and hero slides are blocks: marketing can add, remove and reorder them in
+  the editor without a developer. Slides reference real products, so the hero image is the
+  product's own image and changes when merchandising changes.
+{% endcomment %}
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign badge_blocks = section.blocks | where: 'type', 'badge'
+  assign slide_blocks = section.blocks | where: 'type', 'slide'
+  assign autoplay = section.settings.autoplay_interval | times: 1000
+  unless section.settings.autoplay
+    assign autoplay = 'off'
+  endunless
+-%}
+
+<div class="pl">
+  <section
+    class="hero"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+    {% if slide_blocks.size > 1 %}data-carousel data-autoplay="{{ autoplay }}"{% endif %}
+    {% if section.settings.enable_parallax %}data-parallax-host{% endif %}
+  >
+    <div class="hero-grid">
+      {%- if badge_blocks.size > 0 -%}
+        <div class="badges glass-2" aria-label="Product promises">
+          {%- for block in badge_blocks -%}
+            <div class="badge" {{ block.shopify_attributes }}>
+              <span class="bi">{% render 'purelane-icon', icon: block.settings.icon %}</span>
+              <span>{{ block.settings.label }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="hero-copy">
+        {%- comment -%}
+          One h1 for the page. The highlighted last line is a separate setting so the
+          merchant controls which word is emphasised without writing markup.
+        {%- endcomment -%}
+        <h1 class="d1 rv in">
+          {{ section.settings.heading_line_1 }}<br>
+          {{ section.settings.heading_line_2 }}<br>
+          <span class="lime">{{ section.settings.heading_highlight }}</span>
+        </h1>
+
+        <div class="rule rv rv-d1" aria-hidden="true">
+          <i></i>{% render 'purelane-icon', icon: 'leaf' %}<i></i>
+        </div>
+
+        {%- if section.settings.lede != blank -%}
+          <p class="lede rv rv-d2">{{ section.settings.lede }}</p>
+        {%- endif -%}
+
+        <div class="hero-cta rv rv-d3">
+          {%- if section.settings.primary_label != blank -%}
+            <a class="btn btn-primary" href="{{ section.settings.primary_link | default: '#shop' }}">
+              {{ section.settings.primary_label }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.secondary_label != blank -%}
+            <a class="btn btn-ghost" href="{{ section.settings.secondary_link | default: '#shop' }}">
+              {{ section.settings.secondary_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if slide_blocks.size > 0 -%}
+        <div class="hero-prod" data-parallax>
+          <div class="hstage">
+            {%- for block in slide_blocks -%}
+              {%- assign slide_product = all_products[block.settings.product] -%}
+              <div
+                class="hslide {% if forloop.first %}on{% endif %}"
+                data-slide
+                aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if slide_product.featured_image -%}
+                  {%- comment -%}
+                    The hero image is the page's LCP element, so the first slide loads
+                    eagerly at high priority and the rest stay lazy.
+                  {%- endcomment -%}
+                  {{
+                    slide_product.featured_image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: forloop.first | default: false | ternary: 'eager', 'lazy',
+                      fetchpriority: forloop.first | default: false | ternary: 'high', 'auto',
+                      decoding: 'async',
+                      widths: '300,450,600,900',
+                      sizes: '(min-width: 1024px) 420px, 70vw',
+                      alt: slide_product.featured_image.alt | default: slide_product.title
+                  }}
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if slide_blocks.size > 1 -%}
+            <div class="hdots" role="tablist" aria-label="Choose a featured product">
+              {%- for block in slide_blocks -%}
+                {%- assign slide_product = all_products[block.settings.product] -%}
+                <button
+                  type="button"
+                  role="tab"
+                  data-slide-dot
+                  class="{% if forloop.first %}on{% endif %}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                >
+                  <span class="visually-hidden">
+                    Show {{ slide_product.title | default: 'product' | escape }}
+                  </span>
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane hero",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "Clean" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "That" },
+    {
+      "type": "text", "id": "heading_highlight", "label": "Highlighted line",
+      "info": "Rendered in the accent colour", "default": "Lasts"
+    },
+    {
+      "type": "textarea", "id": "lede", "label": "Intro paragraph",
+      "default": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it."
+    },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Shop bestsellers" },
+    { "type": "url", "id": "primary_link", "label": "Primary link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "Build a bundle" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary link" },
+    { "type": "header", "content": "Motion" },
+    {
+      "type": "checkbox", "id": "autoplay", "label": "Auto-rotate products", "default": true,
+      "info": "Always disabled for visitors who prefer reduced motion."
+    },
+    {
+      "type": "range", "id": "autoplay_interval", "label": "Seconds per product",
+      "min": 2, "max": 10, "step": 1, "unit": "s", "default": 4
+    },
+    {
+      "type": "checkbox", "id": "enable_parallax", "label": "Parallax on the product", "default": true,
+      "info": "Desktop only, and off for reduced motion."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Promise badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "no-chemicals", "label": "No chemicals" },
+            { "value": "check", "label": "Check" },
+            { "value": "truck", "label": "Delivery" }
+          ],
+          "default": "leaf"
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Plant powered" }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "Product slide",
+      "limit": 6,
+      "settings": [{ "type": "product", "id": "product", "label": "Product" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane hero",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "leaf", "label": "Plant powered" } },
+        { "type": "badge", "settings": { "icon": "shield", "label": "Safe for kids & pets" } },
+        { "type": "badge", "settings": { "icon": "no-chemicals", "label": "Zero harsh chemicals" } },
+        { "type": "slide" },
+        { "type": "slide" },
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}
