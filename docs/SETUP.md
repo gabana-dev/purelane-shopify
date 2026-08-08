@@ -132,11 +132,15 @@ Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
       scroll), no autoplay (hero stayed on slide 0 for 9s, 2.4 intervals' worth), both
       marquees frozen (`getAnimations()` empty on the ticker and the reviews track),
       reveals rendered in their final state immediately rather than waiting on an
-      observer, and the dot controls still work manually. **Caveat on method:** forced by
-      overriding `MediaQueryList.matches` and re-emitting the `prefers-reduced-motion`
-      blocks unconditionally, then re-dispatching `shopify:section:load` — not by toggling
-      the OS setting, which the harness cannot reach
+      observer, and the dot controls still work manually. **Caveat on method:** the OS
+      toggle is out of reach from automation, so this was forced two ways — CSS by setting
+      each `prefers-reduced-motion` block's `media.mediaText` to `all` *in place*, and JS
+      by overriding `MediaQueryList.matches` and re-dispatching `shopify:section:load`.
+      In place matters: re-emitting the blocks from an appended `<style>` moves them to the
+      end of the document and silently changes which rule wins a specificity tie, so the
+      first run of this check reported a false failure on the rail
 - [x] Reviews rail is reachable with motion off. It was not: the rail is a marquee, so it
       clips its overflow and relies on the animation to bring later cards into view —
       freeze the animation and every review past the fold became unreachable. Now
-      `overflow-x:auto` under `prefers-reduced-motion`. Found by this pass
+      `overflow-x:auto` under `prefers-reduced-motion`, verified on the live store with the
+      animation frozen. Found by this pass
