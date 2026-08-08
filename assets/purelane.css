@@ -489,3 +489,17 @@
                rgba(255,255,255,.66) 100%);
   }
 }
+
+/* Hero bundle slides: 1, 2 or 3 bottles staggered, matching the prototype's
+   .hs2 / .hs3 layering. Real <img> elements need explicit heights because they
+   replaced fixed-ratio CSS backgrounds. */
+.pl .hslide{display:flex;align-items:flex-end;justify-content:center;gap:0}
+.pl .hp{position:relative;flex:0 0 auto;height:92%;display:block}
+.pl .hp img{width:auto;height:100%;object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 14px 22px rgba(0,74,66,.15))}
+.pl .hs1 .hp{height:97%}
+.pl .hs2 .a{height:80%;margin-right:-8%;z-index:1}
+.pl .hs2 .b{height:97%;z-index:3}
+.pl .hs3 .a{height:75%;margin-right:-8%;z-index:1;order:1}
+.pl .hs3 .c{height:97%;z-index:3;order:2}
+.pl .hs3 .b{height:79%;margin-left:-8%;z-index:2;order:3}

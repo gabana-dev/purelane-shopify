@@ -78,52 +78,98 @@
           <div class="hstage">
             {%- for block in slide_blocks -%}
               {%- liquid
-                assign slide_product = all_products[block.settings.product]
-                assign has_image = false
-                if slide_product != blank and slide_product.featured_image != blank
-                  assign has_image = true
+                # A slide shows one, two or three bottles with a price tag — the prototype
+                # is selling bundle tiers here, not rotating featured products.
+                assign slide_products = ''
+                assign p1 = all_products[block.settings.product_1]
+                assign p2 = all_products[block.settings.product_2]
+                assign p3 = all_products[block.settings.product_3]
+                assign price_product = all_products[block.settings.price_product]
+
+                assign count = 0
+                if p1 != blank
+                  assign count = count | plus: 1
+                endif
+                if p2 != blank
+                  assign count = count | plus: 1
+                endif
+                if p3 != blank
+                  assign count = count | plus: 1
+                endif
+
+                assign on_sale = false
+                if price_product.compare_at_price > price_product.price
+                  assign on_sale = true
+                  assign saving = price_product.compare_at_price | minus: price_product.price
+                  assign discount = saving | times: 100.0 | divided_by: price_product.compare_at_price | round
                 endif
               -%}
               <div
-                class="hslide {% if forloop.first %}on{% endif %}"
+                class="hslide hs{{ count }} {% if forloop.first %}on{% endif %}"
                 data-slide
                 aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
                 {{ block.shopify_attributes }}
               >
-                {%- if has_image -%}
-                  {%- comment -%}
-                    The hero image is the page's LCP element, so the first slide loads
-                    eagerly at high priority and the rest stay lazy.
-                  {%- endcomment -%}
+                {%- assign positions = 'a,b,c' | split: ',' -%}
+                {%- for prod in (1..3) -%}
                   {%- liquid
-                    if forloop.first
-                      assign slide_loading = 'eager'
-                      assign slide_priority = 'high'
-                    else
-                      assign slide_loading = 'lazy'
-                      assign slide_priority = 'auto'
-                    endif
+                    case forloop.index
+                      when 1
+                        assign item = p1
+                      when 2
+                        assign item = p2
+                      when 3
+                        assign item = p3
+                    endcase
+                    assign pos = positions[forloop.index0]
                   -%}
-                  {{
-                    slide_product.featured_image
-                    | image_url: width: 900
-                    | image_tag:
-                      loading: slide_loading,
-                      fetchpriority: slide_priority,
-                      decoding: 'async',
-                      widths: '300,450,600,900',
-                      sizes: '(min-width: 1024px) 420px, 70vw',
-                      alt: slide_product.featured_image.alt | default: slide_product.title
-                  }}
+                  {%- if item != blank and item.featured_image != blank -%}
+                    {%- liquid
+                      if forloop.first
+                        assign img_loading = 'eager'
+                        assign img_priority = 'high'
+                      else
+                        assign img_loading = 'lazy'
+                        assign img_priority = 'auto'
+                      endif
+                    -%}
+                    <span class="hp {{ pos }} d{{ forloop.index }}">
+                      {{
+                        item.featured_image
+                        | image_url: width: 700
+                        | image_tag:
+                          loading: img_loading,
+                          fetchpriority: img_priority,
+                          decoding: 'async',
+                          widths: '200,300,450,700',
+                          sizes: '(min-width: 1024px) 300px, 40vw',
+                          alt: item.title
+                      }}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- if block.settings.label != blank and price_product != blank -%}
+                  <div class="glass-2 ptag">
+                    <span class="lbl">{{ block.settings.label }}</span>
+                    <span class="val">
+                      <strong>{{ price_product.price | money }}</strong>
+                      {%- if on_sale -%}<s>{{ price_product.compare_at_price | money }}</s>{%- endif -%}
+                    </span>
+                    {%- if on_sale -%}
+                      <span class="cut">
+                        {%- if count > 1 -%}Save {{ saving | money }}{%- else -%}{{ discount }}% off{%- endif -%}
+                      </span>
+                    {%- endif -%}
+                  </div>
                 {%- endif -%}
               </div>
             {%- endfor -%}
           </div>
 
           {%- if slide_blocks.size > 1 -%}
-            <div class="hdots" role="tablist" aria-label="Choose a featured product">
+            <div class="hdots" role="tablist" aria-label="Choose a bundle size">
               {%- for block in slide_blocks -%}
-                {%- assign slide_product = all_products[block.settings.product] -%}
                 <button
                   type="button"
                   role="tab"
@@ -133,7 +179,7 @@
                   tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
                 >
                   <span class="visually-hidden">
-                    Show {{ slide_product.title | default: 'product' | escape }}
+                    Show {{ block.settings.label | default: 'bundle' | escape }}
                   </span>
                 </button>
               {%- endfor -%}
@@ -202,9 +248,21 @@
     },
     {
       "type": "slide",
-      "name": "Product slide",
-      "limit": 6,
-      "settings": [{ "type": "product", "id": "product", "label": "Product" }]
+      "name": "Bundle slide",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text", "id": "label", "label": "Label",
+          "info": "e.g. Single bottle, Any 2 products", "default": "Single bottle"
+        },
+        {
+          "type": "product", "id": "price_product", "label": "Price comes from",
+          "info": "Price, compare-at and the saving are read from this product."
+        },
+        { "type": "product", "id": "product_1", "label": "Bottle 1" },
+        { "type": "product", "id": "product_2", "label": "Bottle 2 (optional)" },
+        { "type": "product", "id": "product_3", "label": "Bottle 3 (optional)" }
+      ]
     }
   ],
   "presets": [
