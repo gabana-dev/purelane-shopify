@@ -17,6 +17,12 @@ on:
     branches: [main]
   pull_request:
 
+# theme-check-action publishes its results as a GitHub check run, which the default
+# read-only token cannot create.
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   theme-check:
     name: Theme Check
