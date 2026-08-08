@@ -20,6 +20,24 @@
 (function () {
   'use strict';
 
+  /*
+   * IDEMPOTENCE — this file is included by every Purelane section.
+   *
+   * `purelane-assets.liquid` is rendered per section so the sections stay self-contained
+   * and drop into any template without editing the layout. The browser fetches the file
+   * once, but it EXECUTES this IIFE once per <script> tag — six times on the Purelane
+   * homepage. Without this guard each copy keeps its own private `controllers` map and
+   * registers its own lifecycle listeners, so six controllers end up bound to the same
+   * section and no copy's `destroy` can tear down another copy's timers and observers.
+   * That is the exact stacking the teardown design exists to prevent, reintroduced by the
+   * include strategy rather than by the controllers.
+   *
+   * One copy wins and owns every section; the rest return immediately. Found by counting
+   * observer registrations after a single `shopify:section:load`, not by reading the code.
+   */
+  if (window.__purelaneBehaviour) return;
+  window.__purelaneBehaviour = true;
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var controllers = {}; // section id -> array of teardown functions
 
