@@ -38,7 +38,7 @@
           "type": "slide",
           "settings": {
             "label": "Any 2 products",
-            "price_product": "laundry-care-set",
+            "price_product": "hard-water-solution-kit",
             "product_1": "tap-cleaner-limescale-remover",
             "product_2": "kitchen-cleaner-foaming",
             "product_3": ""
@@ -110,12 +110,28 @@
             "product": "whole-home-box",
             "flag": "Best value"
           }
+        },
+        "c4": {
+          "type": "combo",
+          "settings": {
+            "product": "bathroom-deep-clean",
+            "flag": ""
+          }
+        },
+        "c5": {
+          "type": "combo",
+          "settings": {
+            "product": "hard-water-solution-kit",
+            "flag": ""
+          }
         }
       },
       "block_order": [
         "c1",
         "c2",
-        "c3"
+        "c3",
+        "c4",
+        "c5"
       ],
       "settings": {
         "kicker": "Pre-built to save you money",
