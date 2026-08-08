@@ -433,3 +433,34 @@
   }
   .pl .rv{opacity:1!important;transform:none!important}
 }
+
+/* ---------------------------------------------------------------------------
+ * Sizing for real product images.
+ *
+ * The prototype drew every product as a CSS background on a <span>, with a
+ * per-product aspect-ratio rule (.p-tap, .p-kitchen, …). Those rules carried the
+ * dimensions. Real Shopify images are <img> elements whose intrinsic size is
+ * whatever the merchant uploaded, so the containers now own the sizing instead.
+ * ------------------------------------------------------------------------- */
+
+/* Hero: the slide fills the stage and the bottle sits bottom-right, as in the
+   prototype's flex-end alignment. */
+.pl .hslide img{
+  width:100%;height:100%;
+  object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 34px 54px rgba(2,20,19,.22));
+}
+
+/* Bundle tier thumbnails */
+.pl .tierpix img{width:100%;height:100%;object-fit:contain;object-position:center}
+.pl .tierpix{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:120px}
+
+/* Combo tray: the stacked products inside a combo */
+.pl .stack .it img{width:100%;height:82px;object-fit:contain;object-position:bottom center}
+
+/* Rules the extraction dropped, restored from the prototype */
+.pl .sec-pad{padding:clamp(26px,3.4vw,40px)}
+.pl .revrail:hover .revtrack{animation-play-state:paused}
+@media(max-width:760px){
+  .pl .sec-pad{padding:22px 18px}
+}
