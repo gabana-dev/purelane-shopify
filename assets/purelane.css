@@ -148,7 +148,12 @@
 .pl .hero-prod{position:relative;right:auto;bottom:auto;width:min(88vw,420px);margin:20px auto 0}}
 .pl .badges{position:absolute;right:18px;top:50%;transform:translateY(-50%);width:96px;z-index:4;
   display:flex;flex-direction:column;gap:2px;padding:12px 8px;border-radius:20px}
-.pl .badge{text-align:center;padding:11px 4px}
+/* DAWN COLLISION — see the reset block at the end of this file.
+ * `.badge` is Dawn's own class for the Sale / Sold out pill, so Dawn's rule matches these
+ * elements too and wins every property we don't declare. Left alone, each promise badge
+ * renders as Dawn's solid white 40px-radius pill behind the icon. */
+.pl .badge{text-align:center;padding:11px 4px;
+  background:none;border:0;border-radius:0;font-size:inherit;letter-spacing:inherit;width:auto}
 .pl .badge+.badge{border-top:1px solid rgba(236,230,247,.14)}
 .pl .badge .bi{width:38px;height:38px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;
   background:rgba(236,230,247,.10);border:1px solid rgba(236,230,247,.22);color:var(--accent)}
@@ -725,3 +730,27 @@
 .pl .hero[class*="tone-"]::after{
   background:repeating-linear-gradient(178deg,rgba(255,255,255,0) 0 38px,rgba(255,255,255,.28) 38px 40px);
 }
+
+/* ---------------------------------------------------------------------------
+ * DAWN CLASS COLLISIONS
+ *
+ * Scoping every rule under `.pl` stops our styles leaking into Dawn. It does NOT stop
+ * Dawn leaking into ours, because a shared class name still matches: Dawn's `.badge`
+ * (0,1,0) applies to our elements, and `.pl .badge` (0,2,0) only wins on the properties
+ * it actually declares. Everything else — background, border, radius, font — is Dawn's.
+ *
+ * Four class names are shared with Dawn on this page: badge, card, price and
+ * visually-hidden. `visually-hidden` is deliberately left to Dawn: its implementation is
+ * the canonical one and we want it. The other three are neutralised here.
+ *
+ * The visible symptom was the hero's promise badges rendering as Dawn's solid white
+ * 40px-radius pills — the design's transparent badges with a hairline divider became
+ * three white lozenges. Found by intersecting the class names used inside `.pl` against
+ * the class names Dawn's stylesheets define, not by reading the page.
+ *
+ * The durable fix is a prefix on our own class names. That is a rename across the
+ * stylesheet and every section, which is the right change with more time and the wrong
+ * one to make while verifying a submission.
+ * ------------------------------------------------------------------------- */
+.pl .card{background:var(--g-bg);font-size:inherit}
+.pl .price{display:block;font-size:inherit;letter-spacing:inherit;color:inherit}
