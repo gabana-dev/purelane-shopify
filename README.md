@@ -1,7 +1,32 @@
 # Purelane — prototype homepage → production Shopify sections
 
 Assignment submission for Troopod. Built on stock **Dawn 15.5.0**, committed unmodified as
-the first commit so everything after it is a reviewable diff.
+the first commit so everything after it is a reviewable diff:
+
+```
+git diff 16e496f..HEAD          # every line of the work, isolated from Dawn
+```
+
+## Verified on the live store
+
+Measured, not asserted. Method for each is in [`docs/SETUP.md`](docs/SETUP.md), including
+where the method fell short.
+
+| | |
+|---|---|
+| Theme-editor safety | 10 consecutive `shopify:section:load` events on the hero — carousel transition rate unchanged, 2 before and 2 after. No timer stacking. `unload` freezes it |
+| Layout stability | **CLS 0**, zero layout-shift entries, across two loads |
+| Card contract | One card height across all 8 products at 500 / 768 / 1024 / 1440 — including the sold-out, the imageless and the 103-character title |
+| Horizontal overflow | None at any measured width. Every element past the viewport edge sits inside a clipping ancestor |
+| Contrast | **0 failures** across 530 elements at WCAG AA — after fixing one the prototype shipped at 4.38:1 |
+| Keyboard | 42 of 42 focusable elements take focus with a visible ring. Hero dots use roving `tabindex`; arrows move selection and focus |
+| Reduced motion | No parallax, no autoplay, both marquees frozen, reveals render final-state, manual controls still work |
+| Images | 24 of 24 carry `width` + `height`; 21 lazy; webfonts non-render-blocking |
+| CI | Theme Check + section-schema validation, green |
+
+**Not measured:** 375px specifically (Chrome's minimum window width on macOS is 500; the
+prototype has no breakpoint between 375 and 420), and LCP — there is no throttled-mobile
+Lighthouse run, so no score is claimed. Full gaps in the build notes.
 
 **Read in this order:**
 
