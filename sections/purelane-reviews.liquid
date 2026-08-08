@@ -14,11 +14,19 @@
 {% render 'purelane-assets' %}
 
 {%- liquid
+  # Three sources, in order of intent:
+  #   1. the reviews the merchant explicitly picked
+  #   2. every review metaobject in the shop, so the section works the moment the
+  #      metaobjects exist and nobody has to hand-pick them
+  #   3. editor blocks, so the section is still usable before any metaobject is created
   assign reviews = section.settings.reviews.value
-  # Fall back to blocks so the section still works before any metaobject exists.
-  assign use_blocks = false
   assign review_count = reviews | size
-  if reviews == blank or review_count == 0
+  if review_count == 0
+    assign reviews = shop.metaobjects.review.values
+    assign review_count = reviews | size
+  endif
+  assign use_blocks = false
+  if review_count == 0
     assign use_blocks = true
   endif
 -%}
