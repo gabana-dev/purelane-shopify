@@ -178,6 +178,14 @@
 .pl .panel-head{text-align:center;margin-bottom:26px}
 .pl .panel-head .d2{margin-bottom:12px}
 .pl .panel-head .rule{margin:0 auto;justify-content:center;max-width:240px}
+/* Section-head spacing. These were inline style attributes in the sections; identical
+ * values, moved here so the markup carries no presentation. */
+.pl .panel-h{margin-top:12px}
+.pl .panel-lede{margin:14px auto 0}
+.pl .panel-lede--flush{margin:0 auto}
+.pl .panel-head--flush{margin-bottom:0}
+.pl .bundle-panel{margin-bottom:16px}
+.pl .tier-unit{font-size:12px}
 .pl .panel-head .rule i:first-child{background:linear-gradient(90deg,transparent,rgba(236,230,247,.44))}
 .pl .pillar .d3{margin-bottom:11px}
 .pl .pillar .btn{align-self:flex-start}

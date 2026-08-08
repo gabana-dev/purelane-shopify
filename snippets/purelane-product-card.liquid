@@ -103,9 +103,22 @@
     </div>
   {%- endif -%}
 
+  {%- comment -%}
+    A bare <s> around the compare-at price reads to a screen reader as two prices in a
+    row with no indication which is current. The visually-hidden labels are the only
+    thing separating "₹200, was ₹299" from "₹200 ₹299".
+  {%- endcomment -%}
   <div class="pr">
+    <span class="visually-hidden">
+      {%- if on_sale -%}
+        {{ 'products.product.price.sale_price' | t }}
+      {%- else -%}
+        {{ 'products.product.price.regular_price' | t }}
+      {%- endif -%}
+    </span>
     <strong>{{ product.price | money }}</strong>
     {%- if on_sale -%}
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
       <s>{{ product.compare_at_price | money }}</s>
       <em>{{ discount }}% off</em>
     {%- endif -%}

@@ -24,13 +24,13 @@
           <span class="kicker">{{ section.settings.kicker }}</span>
         {%- endif -%}
         {%- if section.settings.heading != blank -%}
-          <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+          <h2 class="d2 panel-h">{{ section.settings.heading }}</h2>
         {%- endif -%}
         <div class="rule" aria-hidden="true">
           <i></i>{% render 'purelane-icon', icon: 'leaf' %}<i></i>
         </div>
         {%- if section.settings.lede != blank -%}
-          <p class="lede" style="margin:14px auto 0">{{ section.settings.lede }}</p>
+          <p class="lede panel-lede">{{ section.settings.lede }}</p>
         {%- endif -%}
       </div>
 

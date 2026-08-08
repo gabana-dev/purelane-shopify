@@ -40,8 +40,14 @@
   >
     <div class="wrap">
       <div class="revhead rv">
+        {%- comment -%}
+          The prototype's reviews band has no display heading — the kicker is the only
+          label. Rendering it as a span left the section invisible to heading navigation,
+          so it is an h2 carrying the same .kicker styling: identical pixels, real
+          document structure.
+        {%- endcomment -%}
         {%- if section.settings.kicker != blank -%}
-          <span class="kicker">{{ section.settings.kicker }}</span>
+          <h2 class="kicker">{{ section.settings.kicker }}</h2>
         {%- endif -%}
         {%- if section.settings.aggregate_rating != blank -%}
           <span class="agg">

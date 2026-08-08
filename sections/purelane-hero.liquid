@@ -80,7 +80,6 @@
               {%- liquid
                 # A slide shows one, two or three bottles with a price tag — the prototype
                 # is selling bundle tiers here, not rotating featured products.
-                assign slide_products = ''
                 assign p1 = all_products[block.settings.product_1]
                 assign p2 = all_products[block.settings.product_2]
                 assign p3 = all_products[block.settings.product_3]
@@ -104,9 +103,17 @@
                   assign discount = saving | times: 100.0 | divided_by: price_product.compare_at_price | round
                 endif
               -%}
+              {%- comment -%}
+                role="tab" without a panel to control is an incomplete pattern — the dots
+                announced as tabs but controlled nothing. Each slide is the tabpanel its
+                dot points at, labelled by that dot.
+              {%- endcomment -%}
               <div
                 class="hslide hs{{ count }} {% if forloop.first %}on{% endif %}"
                 data-slide
+                role="tabpanel"
+                id="{{ section.id }}-slide-{{ forloop.index }}"
+                aria-labelledby="{{ section.id }}-tab-{{ forloop.index }}"
                 aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
                 {{ block.shopify_attributes }}
               >
@@ -154,7 +161,10 @@
                     <span class="lbl">{{ block.settings.label }}</span>
                     <span class="val">
                       <strong>{{ price_product.price | money }}</strong>
-                      {%- if on_sale -%}<s>{{ price_product.compare_at_price | money }}</s>{%- endif -%}
+                      {%- if on_sale -%}
+                        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                        <s>{{ price_product.compare_at_price | money }}</s>
+                      {%- endif -%}
                     </span>
                     {%- if on_sale -%}
                       <span class="cut">
@@ -173,6 +183,8 @@
                 <button
                   type="button"
                   role="tab"
+                  id="{{ section.id }}-tab-{{ forloop.index }}"
+                  aria-controls="{{ section.id }}-slide-{{ forloop.index }}"
                   data-slide-dot
                   class="{% if forloop.first %}on{% endif %}"
                   aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"

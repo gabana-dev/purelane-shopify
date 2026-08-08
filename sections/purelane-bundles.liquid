@@ -20,16 +20,16 @@
     data-section-id="{{ section.id }}"
   >
     <div class="wrap">
-      <div class="glass sec-pad rv" style="margin-bottom:16px">
-        <div class="panel-head" style="margin-bottom:0">
+      <div class="glass sec-pad rv bundle-panel">
+        <div class="panel-head panel-head--flush">
           {%- if section.settings.kicker != blank -%}
             <span class="kicker">{{ section.settings.kicker }}</span>
           {%- endif -%}
           {%- if section.settings.heading != blank -%}
-            <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+            <h2 class="d2 panel-h">{{ section.settings.heading }}</h2>
           {%- endif -%}
           {%- if section.settings.lede != blank -%}
-            <p class="lede" style="margin:0 auto">{{ section.settings.lede }}</p>
+            <p class="lede panel-lede panel-lede--flush">{{ section.settings.lede }}</p>
           {%- endif -%}
         </div>
       </div>
@@ -91,6 +91,7 @@
                 {%- if has_product -%}
                   {{ tier_price | money }}
                   {%- if tier_compare > tier_price -%}
+                    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
                     <s>{{ tier_compare | money }}</s>
                   {%- endif -%}
                 {%- else -%}
@@ -102,7 +103,7 @@
               </div>
 
               {%- if per_unit > 0 -%}
-                <p class="body-s" style="font-size:12px">Flat {{ per_unit | money }} per product</p>
+                <p class="body-s tier-unit">Flat {{ per_unit | money }} per product</p>
               {%- endif -%}
 
               {%- if block.settings.features != blank -%}
