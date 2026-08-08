@@ -94,7 +94,7 @@ background sequence is wrong.
 The visible consequence was the hero rendering on white. Rather than leave that, the hero
 now owns its own gradient and overlay: identical output, no cross-section coupling.
 
-## Six bugs worth reporting on myself
+## Eight bugs worth reporting on myself
 
 **An unterminated quote silently discarded the entire stylesheet.** When merging the two
 `:root` blocks my script split declarations on `;` — which also appears inside
@@ -157,6 +157,31 @@ two products cost more than three. The pricing was doing exactly what it should 
 creates the ₹349/₹598 bundle, `scripts/add_hero_bundle.py` adds just that product to a store
 that was already seeded, and the slide's price product is a theme-editor setting, so
 correcting it is a merchant action rather than a code change.
+
+**Every seed image was rendered at the wrong shape, and only one of them looked wrong.**
+The prototype's art is inline SVG with per-asset viewBoxes: card bottles at 380×595
+(0.639), hero bottles at 380×1180 (**0.322**), combo art at 460×409 (**1.125**). My render
+step rasterised all fourteen onto one shared 600×920 canvas, so everything shipped at
+0.652. The card art survived because 0.639 is close enough to 0.652 that nothing looked
+off — which is exactly why it went unnoticed. The hero bottles came out at roughly double
+their drawn width, overflowed the stage and pushed the third bottle behind the promise
+badges.
+
+I first treated that as a layout problem and added width caps to the CSS. That was
+treating the symptom: the aspect belongs in the asset, not in a correction factor in the
+stylesheet. Re-rendering each asset at its own viewBox let the caps come back out and the
+prototype's own height percentages produce the prototype's own widths.
+
+The hero also needs the tall drawing rather than the catalogue shot — they are genuinely
+different art upstream — so products carry `custom.hero_image` and the hero falls back to
+`featured_image` when it is unset.
+
+**The reviews marquee scrolled off its own content.** The animation runs to
+`translateX(-50%)`, which only loops seamlessly if the track holds *two* copies of the
+set: at the halfway point copy two sits exactly where copy one began. I rendered the
+reviews once, so the track ran out and left a growing empty gap at the tail. The set is
+duplicated now, with the clone `aria-hidden` and its cards out of the tab order, so a
+screen reader and a keyboard user each meet every review exactly once.
 
 ## Gaps — being straight about them
 

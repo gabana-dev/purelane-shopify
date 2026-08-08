@@ -3,7 +3,7 @@ Purelane dev-store seeder.
 
 Populates the store in one pass so it is reproducible from scratch rather than
 hand-clicked: metafield definitions, the review metaobject definition and entries,
-eight products (including the three edge cases the brief requires), three combo
+eight products (including the three edge cases the brief requires), five combo
 products, a Bestsellers collection, and Online Store publication.
 
 Not part of the deliverable — this is scaffolding. Delete the custom app afterwards.
