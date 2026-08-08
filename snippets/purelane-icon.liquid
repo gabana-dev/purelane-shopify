@@ -32,6 +32,15 @@
       <path d="M6.4 17.6 17.6 6.4"/>
     {%- when 'check' -%}
       <path d="m5 12.5 4.5 4.5L19 7.5"/>
+    {%- when 'box' -%}
+      <path d="M12 3 4 7v10l8 4 8-4V7Z"/><path d="M4 7l8 4 8-4M12 11v10"/>
+    {%- when 'search' -%}
+      <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+    {%- when 'user' -%}
+      <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
+    {%- when 'cart' -%}
+      <path d="M3 4h2l2.4 11.2A2 2 0 0 0 9.4 17h8.2a2 2 0 0 0 2-1.6L21 8H6"/>
+      <circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/>
     {%- when 'truck' -%}
       <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/>
       <circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/>

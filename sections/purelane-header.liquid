@@ -1,0 +1,114 @@
+{% comment %}
+  Purelane — announcement ticker + floating nav pill.
+
+  BONUS. The brief scopes the assignment to five sections and says everything else is
+  extra, so this was built only after those five were done. It matters visually because
+  the header is the first thing anyone sees, and stock Dawn's header reads as a different
+  site entirely.
+
+  Two behaviours from the prototype are preserved:
+    - the ticker scrolls infinitely (the track is duplicated so the loop is seamless)
+    - the nav pill moves up as you scroll past 90px
+
+  Menu links come from a Shopify navigation menu, so a merchant edits them in
+  Navigation rather than in code. Cart count is live from Shopify's cart object.
+{% endcomment %}
+
+{% render 'purelane-assets' %}
+
+<div class="pl">
+  <div
+    class="pl-header"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+    data-sticky-header
+  >
+    {%- if section.blocks.size > 0 -%}
+      <div class="ticker" aria-hidden="true">
+        {%- comment -%}
+          The track is rendered twice: the keyframe translates it -50%, so a duplicated
+          list is what makes the loop seamless rather than snapping back.
+        {%- endcomment -%}
+        <div class="track">
+          {%- for i in (1..2) -%}
+            {%- for block in section.blocks -%}
+              <span>{{ block.settings.text }} <b>{{ block.settings.highlight }}</b></span>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <header class="pl-nav">
+      <div class="navpill glass">
+        <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home">
+          <span class="mark">{% render 'purelane-icon', icon: 'box' %}</span>
+          <span class="txt">
+            <span class="n1">{{ section.settings.brand_name | default: shop.name }}</span>
+            <span class="n2">{{ section.settings.tagline }}</span>
+          </span>
+        </a>
+
+        {%- if section.settings.menu != blank -%}
+          <nav class="nav" aria-label="Main">
+            {%- for link in section.settings.menu.links -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+
+        <div class="navtools">
+          <a class="ico hide-s" href="{{ routes.search_url }}" aria-label="Search">
+            {% render 'purelane-icon', icon: 'search' %}
+          </a>
+          <a class="ico hide-s" href="{{ routes.account_url }}" aria-label="Account">
+            {% render 'purelane-icon', icon: 'user' %}
+          </a>
+          <a class="ico" href="{{ routes.cart_url }}"
+             aria-label="Cart, {{ cart.item_count }} items">
+            {% render 'purelane-icon', icon: 'cart' %}
+            <span class="dot">{{ cart.item_count }}</span>
+          </a>
+        </div>
+      </div>
+    </header>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane header",
+  "tag": "section",
+  "class": "purelane-section purelane-header-section",
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Purelane" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Clean, simply" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Ticker message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free shipping" },
+        {
+          "type": "text", "id": "highlight", "label": "Highlighted text",
+          "info": "Rendered in the accent colour",
+          "default": "on every bundle across India"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane header",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Free shipping", "highlight": "on every bundle across India" } },
+        { "type": "message", "settings": { "text": "100% plant-based", "highlight": "and non-toxic" } },
+        { "type": "message", "settings": { "text": "Loved by", "highlight": "30,000+ happy homes" } },
+        { "type": "message", "settings": { "text": "Buy 3", "highlight": "at flat ₹499" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
