@@ -375,3 +375,81 @@
 .pl .qty{background:rgba(255,255,255,.56);border:1px solid rgba(75,58,143,.18)}
 .pl .qty button:hover{background:rgba(75,58,143,.10)}
 .pl .ins .ph .pimg{filter:drop-shadow(0 9px 14px rgba(0,74,66,.15))}
+/* ---------------------------------------------------------------------------
+ * Additions for the Shopify port.
+ * These cover markup the prototype did not have because it had no real data:
+ * real <img> elements, an empty-image state, a card link wrapper, and the
+ * screen-reader-only text we added for accessibility.
+ * ------------------------------------------------------------------------- */
+
+/* Screen-reader-only text. Scoped copy so we don't depend on Dawn's utility. */
+.pl .visually-hidden{
+  position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* The whole card top is one link; the button stays a separate control. */
+.pl .card__link{display:block;color:inherit;text-decoration:none}
+.pl .card__link:focus-visible{outline:2px solid var(--brand);outline-offset:4px;border-radius:var(--r-sm)}
+
+/* Real product images sit where the prototype used a CSS background. Fixed aspect
+   ratio so the grid never shifts while images load. */
+.pl .shot img,
+.pl .card__image{
+  display:block;width:100%;height:auto;aspect-ratio:130/200;
+  object-fit:contain;margin-inline:auto;
+}
+
+/* A product with no image is a real merchandising state, not an error. */
+.pl .card__image--empty{
+  display:grid;place-items:center;
+  background:linear-gradient(158deg,rgba(75,58,143,.10),rgba(75,58,143,.04));
+  border-radius:var(--r-sm);color:var(--brand);opacity:.55;
+}
+.pl .card__image--empty svg{width:38px;height:38px}
+
+/* Long titles must not change card height. Two lines, then ellipsis. */
+.pl .card__title{
+  font-family:'Outfit',system-ui,sans-serif;font-weight:600;font-size:15px;line-height:1.35;
+  margin:10px 0 6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;min-height:2.7em;
+}
+
+/* Cards are equal height regardless of which optional rows are present, so the
+   Add to cart buttons line up across the row. */
+.pl .card{display:flex;flex-direction:column}
+.pl .card .card__form,
+.pl .card > .btn{margin-top:auto}
+
+.pl .combo .body h3 a{color:inherit;text-decoration:none}
+.pl .combo .body h3 a:hover{text-decoration:underline}
+
+/* Review avatar: one initial instead of repeating a large inline SVG per card. */
+.pl .who__avatar{
+  display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:rgba(75,58,143,.12);color:var(--brand);
+  font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;flex:0 0 auto;
+}
+.pl .rcard__title{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;margin:6px 0}
+
+/* Scroll rails are focusable, so they need a visible focus ring. */
+.pl .comborail:focus-visible,
+.pl .revrail:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+
+/* Grid columns are merchant-configurable, so they come from the section settings. */
+.pl .shelf{grid-template-columns:repeat(var(--pl-cols-mobile,2),minmax(0,1fr))}
+@media(min-width:1024px){
+  .pl .shelf{grid-template-columns:repeat(var(--pl-cols,4),minmax(0,1fr))}
+}
+
+/* Disabled controls must look disabled, not just behave that way. */
+.pl .btn[disabled]{opacity:.55;cursor:not-allowed}
+
+/* Honour the visitor's motion preference for everything we animate. */
+@media(prefers-reduced-motion:reduce){
+  .pl *,.pl *::before,.pl *::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+  .pl .rv{opacity:1!important;transform:none!important}
+}
