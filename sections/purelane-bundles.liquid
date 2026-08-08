@@ -41,18 +41,19 @@
             {%- liquid
               assign tier_product = all_products[block.settings.product]
 
-              # Platform price wins; the manual setting is only a fallback.
+              # Platform price wins. The manual settings are plain text for the case where
+              # no product represents the tier yet, so they are rendered as typed rather
+              # than pushed through the money filter (which expects cents).
+              assign has_product = false
               if tier_product != blank
+                assign has_product = true
                 assign tier_price = tier_product.price
                 assign tier_compare = tier_product.compare_at_price
-              else
-                assign tier_price = block.settings.price
-                assign tier_compare = block.settings.compare_at_price
               endif
 
               assign qty = block.settings.quantity
               assign per_unit = 0
-              if qty > 0
+              if has_product and qty > 0
                 assign per_unit = tier_price | divided_by: qty
               endif
 
@@ -88,9 +89,16 @@
               <div class="qty">{{ qty }}<small>Products</small></div>
 
               <div class="price">
-                {{ tier_price | money }}
-                {%- if tier_compare > tier_price -%}
-                  <s>{{ tier_compare | money }}</s>
+                {%- if has_product -%}
+                  {{ tier_price | money }}
+                  {%- if tier_compare > tier_price -%}
+                    <s>{{ tier_compare | money }}</s>
+                  {%- endif -%}
+                {%- else -%}
+                  {{ block.settings.price }}
+                  {%- if block.settings.compare_at_price != blank -%}
+                    <s>{{ block.settings.compare_at_price }}</s>
+                  {%- endif -%}
                 {%- endif -%}
               </div>
 

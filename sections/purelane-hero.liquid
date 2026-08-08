@@ -90,12 +90,21 @@
                     The hero image is the page's LCP element, so the first slide loads
                     eagerly at high priority and the rest stay lazy.
                   {%- endcomment -%}
+                  {%- liquid
+                    if forloop.first
+                      assign slide_loading = 'eager'
+                      assign slide_priority = 'high'
+                    else
+                      assign slide_loading = 'lazy'
+                      assign slide_priority = 'auto'
+                    endif
+                  -%}
                   {{
                     slide_product.featured_image
                     | image_url: width: 900
                     | image_tag:
-                      loading: forloop.first | default: false | ternary: 'eager', 'lazy',
-                      fetchpriority: forloop.first | default: false | ternary: 'high', 'auto',
+                      loading: slide_loading,
+                      fetchpriority: slide_priority,
                       decoding: 'async',
                       widths: '300,450,600,900',
                       sizes: '(min-width: 1024px) 420px, 70vw',

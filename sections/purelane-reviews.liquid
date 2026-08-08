@@ -18,7 +18,8 @@
   assign reviews = section.settings.reviews.value
   # Fall back to blocks so the section still works before any metaobject exists.
   assign use_blocks = false
-  if reviews == blank or reviews.count == 0
+  assign review_count = reviews | size
+  if reviews == blank or review_count == 0
     assign use_blocks = true
   endif
 -%}
