@@ -33,7 +33,7 @@
 
 <div class="pl">
   <section
-    class="sec revband"
+    class="sec revband tone-{{ section.settings.tone | default: '1' }}"
     id="reviews"
     data-purelane-section
     data-section-id="{{ section.id }}"
@@ -92,14 +92,61 @@
   "tag": "section",
   "class": "purelane-section",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "That's what they said" },
-    { "type": "text", "id": "aggregate_rating", "label": "Aggregate rating", "default": "4.8" },
-    { "type": "text", "id": "aggregate_label", "label": "Aggregate label", "default": "from 8,000+ reviews" },
-    { "type": "text", "id": "secondary_label", "label": "Secondary stat", "default": "Loved by 12 lakh+ homes" },
     {
-      "type": "metaobject_list", "id": "reviews", "metaobject_type": "review",
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "That's what they said"
+    },
+    {
+      "type": "text",
+      "id": "aggregate_rating",
+      "label": "Aggregate rating",
+      "default": "4.8"
+    },
+    {
+      "type": "text",
+      "id": "aggregate_label",
+      "label": "Aggregate label",
+      "default": "from 8,000+ reviews"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary stat",
+      "default": "Loved by 12 lakh+ homes"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "reviews",
+      "metaobject_type": "review",
       "label": "Reviews",
       "info": "Add reviews in Content > Metaobjects. Falls back to the blocks below if empty."
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "info": "Matches the prototype's scroll gradient. 1 is lightest, 4 deepest.",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 — lightest"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4 — deepest"
+        }
+      ],
+      "default": "1"
     }
   ],
   "blocks": [
@@ -107,14 +154,42 @@
       "type": "review",
       "name": "Review (fallback)",
       "settings": [
-        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
-        { "type": "text", "id": "title", "label": "Title" },
-        { "type": "textarea", "id": "body", "label": "Review" },
-        { "type": "text", "id": "author", "label": "Author" },
-        { "type": "text", "id": "context", "label": "Product context" }
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "text",
+          "id": "context",
+          "label": "Product context"
+        }
       ]
     }
   ],
-  "presets": [{ "name": "Purelane reviews" }]
+  "presets": [
+    {
+      "name": "Purelane reviews"
+    }
+  ]
 }
 {% endschema %}

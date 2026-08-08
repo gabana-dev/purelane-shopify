@@ -14,7 +14,7 @@
 
 <div class="pl">
   <section
-    class="sec"
+    class="sec tone-{{ section.settings.tone | default: '3' }}"
     id="bundles"
     data-purelane-section
     data-section-id="{{ section.id }}"
@@ -136,11 +136,48 @@
   "tag": "section",
   "class": "purelane-section",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Build your bundle" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "One box. Every room." },
     {
-      "type": "textarea", "id": "lede", "label": "Intro paragraph",
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Build your bundle"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "One box. Every room."
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Intro paragraph",
       "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "info": "Matches the prototype's scroll gradient. 1 is lightest, 4 deepest.",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 — lightest"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4 — deepest"
+        }
+      ],
+      "default": "3"
     }
   ],
   "blocks": [
@@ -148,21 +185,62 @@
       "type": "tier",
       "name": "Tier",
       "settings": [
-        { "type": "text", "id": "tag", "label": "Tag", "default": "Starter" },
         {
-          "type": "product", "id": "product", "label": "Bundle product",
+          "type": "text",
+          "id": "tag",
+          "label": "Tag",
+          "default": "Starter"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Bundle product",
           "info": "Preferred. Price and availability then come from Shopify."
         },
-        { "type": "range", "id": "quantity", "label": "Products in tier", "min": 1, "max": 12, "step": 1, "default": 2 },
         {
-          "type": "text", "id": "price", "label": "Display price (fallback)",
+          "type": "range",
+          "id": "quantity",
+          "label": "Products in tier",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Display price (fallback)",
           "info": "Used only when no bundle product is selected. In cents, e.g. 34900."
         },
-        { "type": "text", "id": "compare_at_price", "label": "Compare-at price (fallback)" },
-        { "type": "textarea", "id": "features", "label": "Features", "info": "One per line", "default": "Pick any two products\nFree shipping across India" },
-        { "type": "checkbox", "id": "highlight", "label": "Highlight this tier", "default": false },
-        { "type": "text", "id": "cta", "label": "Button label", "default": "Build this box" },
-        { "type": "url", "id": "link", "label": "Button link" }
+        {
+          "type": "text",
+          "id": "compare_at_price",
+          "label": "Compare-at price (fallback)"
+        },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Features",
+          "info": "One per line",
+          "default": "Pick any two products\nFree shipping across India"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Highlight this tier",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "cta",
+          "label": "Button label",
+          "default": "Build this box"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        }
       ]
     }
   ],
@@ -170,9 +248,28 @@
     {
       "name": "Purelane bundles",
       "blocks": [
-        { "type": "tier", "settings": { "tag": "Starter", "quantity": 2 } },
-        { "type": "tier", "settings": { "tag": "Most popular", "quantity": 3, "highlight": true } },
-        { "type": "tier", "settings": { "tag": "Best value", "quantity": 5 } }
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Starter",
+            "quantity": 2
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Most popular",
+            "quantity": 3,
+            "highlight": true
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Best value",
+            "quantity": 5
+          }
+        }
       ]
     }
   ]

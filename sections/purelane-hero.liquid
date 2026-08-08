@@ -22,7 +22,7 @@
 
 <div class="pl">
   <section
-    class="hero"
+    class="hero tone-{{ section.settings.tone | default: '1' }}"
     data-purelane-section
     data-section-id="{{ section.id }}"
     {% if slide_blocks.size > 1 %}data-carousel data-autoplay="{{ autoplay }}"{% endif %}
@@ -197,33 +197,109 @@
   "tag": "section",
   "class": "purelane-section",
   "settings": [
-    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "Clean" },
-    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "That" },
     {
-      "type": "text", "id": "heading_highlight", "label": "Highlighted line",
-      "info": "Rendered in the accent colour", "default": "Lasts"
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "Clean"
     },
     {
-      "type": "textarea", "id": "lede", "label": "Intro paragraph",
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "That"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Highlighted line",
+      "info": "Rendered in the accent colour",
+      "default": "Lasts"
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Intro paragraph",
       "default": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it."
     },
-    { "type": "header", "content": "Buttons" },
-    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Shop bestsellers" },
-    { "type": "url", "id": "primary_link", "label": "Primary link" },
-    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "Build a bundle" },
-    { "type": "url", "id": "secondary_link", "label": "Secondary link" },
-    { "type": "header", "content": "Motion" },
     {
-      "type": "checkbox", "id": "autoplay", "label": "Auto-rotate products", "default": true,
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button",
+      "default": "Shop bestsellers"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button",
+      "default": "Build a bundle"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary link"
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate products",
+      "default": true,
       "info": "Always disabled for visitors who prefer reduced motion."
     },
     {
-      "type": "range", "id": "autoplay_interval", "label": "Seconds per product",
-      "min": 2, "max": 10, "step": 1, "unit": "s", "default": 4
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Seconds per product",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
     },
     {
-      "type": "checkbox", "id": "enable_parallax", "label": "Parallax on the product", "default": true,
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Parallax on the product",
+      "default": true,
       "info": "Desktop only, and off for reduced motion."
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "info": "Matches the prototype's scroll gradient. 1 is lightest, 4 deepest.",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 — lightest"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4 — deepest"
+        }
+      ],
+      "default": "1"
     }
   ],
   "blocks": [
@@ -233,17 +309,39 @@
       "limit": 4,
       "settings": [
         {
-          "type": "select", "id": "icon", "label": "Icon",
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
           "options": [
-            { "value": "leaf", "label": "Leaf" },
-            { "value": "shield", "label": "Shield" },
-            { "value": "no-chemicals", "label": "No chemicals" },
-            { "value": "check", "label": "Check" },
-            { "value": "truck", "label": "Delivery" }
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "no-chemicals",
+              "label": "No chemicals"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            }
           ],
           "default": "leaf"
         },
-        { "type": "text", "id": "label", "label": "Label", "default": "Plant powered" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Plant powered"
+        }
       ]
     },
     {
@@ -252,16 +350,33 @@
       "limit": 4,
       "settings": [
         {
-          "type": "text", "id": "label", "label": "Label",
-          "info": "e.g. Single bottle, Any 2 products", "default": "Single bottle"
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "e.g. Single bottle, Any 2 products",
+          "default": "Single bottle"
         },
         {
-          "type": "product", "id": "price_product", "label": "Price comes from",
+          "type": "product",
+          "id": "price_product",
+          "label": "Price comes from",
           "info": "Price, compare-at and the saving are read from this product."
         },
-        { "type": "product", "id": "product_1", "label": "Bottle 1" },
-        { "type": "product", "id": "product_2", "label": "Bottle 2 (optional)" },
-        { "type": "product", "id": "product_3", "label": "Bottle 3 (optional)" }
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Bottle 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Bottle 2 (optional)"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Bottle 3 (optional)"
+        }
       ]
     }
   ],
@@ -269,12 +384,36 @@
     {
       "name": "Purelane hero",
       "blocks": [
-        { "type": "badge", "settings": { "icon": "leaf", "label": "Plant powered" } },
-        { "type": "badge", "settings": { "icon": "shield", "label": "Safe for kids & pets" } },
-        { "type": "badge", "settings": { "icon": "no-chemicals", "label": "Zero harsh chemicals" } },
-        { "type": "slide" },
-        { "type": "slide" },
-        { "type": "slide" }
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "label": "Plant powered"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "label": "Safe for kids & pets"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "no-chemicals",
+            "label": "Zero harsh chemicals"
+          }
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
       ]
     }
   ]

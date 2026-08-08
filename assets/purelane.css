@@ -595,3 +595,31 @@
 @media(prefers-reduced-motion:reduce){
   .pl .ticker .track{animation:none}
 }
+
+/* ---------------------------------------------------------------------------
+ * Scene tones.
+ *
+ * The prototype paints a single page-wide gradient that deepens as you scroll,
+ * driven by a fixed "scene" layer every section shares. That layer is not ported
+ * (it breaks section independence in the theme editor), so each section instead
+ * carries the tone of the scene it belonged to. Same four gradients, verbatim;
+ * the difference is that a section now owns its own background and can be
+ * reordered without breaking the sequence.
+ * ------------------------------------------------------------------------- */
+.pl .sec.tone-1,.pl .hero.tone-1{background:linear-gradient(178deg,#fbfffb 0%,#eafaec 24%,#d6f1dc 54%,#bfe8ca 100%)}
+.pl .sec.tone-2,.pl .hero.tone-2{background:linear-gradient(178deg,#f6fdf7 0%,#e3f7e7 26%,#cbedd4 58%,#b2e2c2 100%)}
+.pl .sec.tone-3,.pl .hero.tone-3{background:linear-gradient(178deg,#f0fbf2 0%,#d9f2df 28%,#bde6c8 60%,#a2d9b6 100%)}
+.pl .sec.tone-4,.pl .hero.tone-4{background:linear-gradient(178deg,#e9f8ec 0%,#cdedd6 30%,#addcbe 62%,#8ecdaa 100%)}
+.pl .sec[class*="tone-"]{position:relative}
+
+/* The prototype overlays a soft water texture on the scene. Reproduced as a
+   lightweight repeating gradient rather than the original's four stacked SVG
+   layers — same impression, no extra requests, no per-section DOM. */
+.pl .sec[class*="tone-"]::before,
+.pl .hero[class*="tone-"]::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:
+    repeating-linear-gradient(178deg,rgba(255,255,255,0) 0 38px,rgba(255,255,255,.30) 38px 40px),
+    repeating-linear-gradient(172deg,rgba(255,255,255,0) 0 64px,rgba(255,255,255,.18) 64px 66px);
+}
+.pl .sec[class*="tone-"] > *{position:relative;z-index:1}

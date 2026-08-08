@@ -16,7 +16,7 @@
 
 <div class="pl">
   <section
-    class="sec"
+    class="sec tone-{{ section.settings.tone | default: '3' }}"
     id="shop"
     data-purelane-section
     data-section-id="{{ section.id }}"
@@ -64,33 +64,104 @@
   "tag": "section",
   "class": "purelane-section",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Bestsellers" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by 30,000 homes" },
-    { "type": "collection", "id": "collection", "label": "Collection" },
     {
-      "type": "range", "id": "products_to_show", "label": "Products to show",
-      "min": 2, "max": 24, "step": 1, "default": 8
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Bestsellers"
     },
     {
-      "type": "range", "id": "columns_desktop", "label": "Columns on desktop",
-      "min": 2, "max": 5, "step": 1, "default": 4
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by 30,000 homes"
     },
     {
-      "type": "select", "id": "columns_mobile", "label": "Columns on mobile",
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
       "options": [
-        { "value": "1", "label": "1" },
-        { "value": "2", "label": "2" }
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
       ],
       "default": "2"
     },
-    { "type": "header", "content": "Card details" },
-    { "type": "checkbox", "id": "show_rating", "label": "Show rating", "default": true },
     {
-      "type": "checkbox", "id": "show_badge", "label": "Show badge",
+      "type": "header",
+      "content": "Card details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
       "info": "Set each product's badge text in its metafield custom.badge",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "info": "Matches the prototype's scroll gradient. 1 is lightest, 4 deepest.",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 — lightest"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4 — deepest"
+        }
+      ],
+      "default": "3"
     }
   ],
-  "presets": [{ "name": "Purelane shop grid" }]
+  "presets": [
+    {
+      "name": "Purelane shop grid"
+    }
+  ]
 }
 {% endschema %}
