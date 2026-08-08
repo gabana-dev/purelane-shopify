@@ -141,13 +141,13 @@ mutation($mf: [MetafieldsSetInput!]!) {
 
 PRODUCTS = [
     dict(title="Tap cleaner & limescale remover", price="200", compare="299",
-         img="p-tap", badge="Best seller", rating="4.8", count=237),
+         img="p-tap-detail", badge="Best seller", rating="4.8", count=237),
     dict(title="Kitchen cleaner, foaming", price="200", compare="299",
-         img="p-kitchen", badge="Best seller", rating="4.8", count=254),
+         img="p-kitchen-detail", badge="Best seller", rating="4.8", count=254),
     dict(title="Copper, bronze & brass cleaner", price="200", compare="299",
-         img="p-metal", badge="Top rated", rating="4.8", count=231),
+         img="p-metal-detail", badge="Top rated", rating="4.8", count=231),
     dict(title="Washing machine cleaner & descaler", price="200", compare="299",
-         img="p-wm", badge="New", rating="4.8", count=183),
+         img="p-wm-detail", badge="New", rating="4.8", count=183),
     dict(title="Organic dishwash liquid gel", price="249", compare="349",
          img="p-dish", badge="", rating="4.7", count=402),
     # EDGE CASE 1 — sold out
