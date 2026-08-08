@@ -72,7 +72,7 @@
                 <span class="tag">{{ block.settings.tag }}</span>
               {%- endif -%}
 
-              {%- if tier_product.featured_image -%}
+              {%- if has_product and tier_product.featured_image != blank -%}
                 <div class="tierpix" aria-hidden="true">
                   {{
                     tier_product.featured_image

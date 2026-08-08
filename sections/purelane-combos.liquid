@@ -68,7 +68,7 @@
                   <div class="stack">
                     {%- for item in items -%}
                       <span class="it">
-                        {%- if item.featured_image -%}
+                        {%- if item != blank and item.featured_image != blank -%}
                           {{
                             item.featured_image
                             | image_url: width: 240

@@ -62,7 +62,7 @@
         <span class="pill">{{ badge }}</span>
       {%- endif -%}
 
-      {%- if product.featured_image -%}
+      {%- if product.featured_image != blank -%}
         {{
           product.featured_image
           | image_url: width: 600
