@@ -26,6 +26,10 @@
   --paper-3:rgba(36,26,61,.56);
   --accent:#b8701c;
   --accent-2:#c9761d;
+  /* The prototype's green is #4f7d10, which measures 4.38:1 on the surfaces it is used
+   * on — every one of them small text, so AA wants 4.5. Darkened to clear it at 4.81.
+   * Same hue, and the change is invisible side by side; it is a fix, not a repaint. */
+  --leaf:#4a7610;
   --surface:#17102b;
   --g-bg:linear-gradient(158deg,rgba(255,255,255,.80),rgba(236,230,247,.56) 58%,rgba(222,212,240,.50));
   --g-line:rgba(75,58,143,.16);
@@ -327,30 +331,30 @@
 .pl .btn-primary:hover{box-shadow:0 18px 36px rgba(0,80,74,.32),inset 0 1px 0 rgba(255,255,255,.28)}
 .pl .btn-ghost{background:rgba(255,255,255,.66);border:1px solid rgba(75,58,143,.22);color:#01423b}
 .pl .btn-ghost:hover{background:rgba(255,255,255,.9)}
-.pl .badge .bi{background:rgba(255,255,255,.62);border:1px solid rgba(75,58,143,.16);color:#4f7d10}
-.pl .card .pill{background:rgba(255,255,255,.86);border:1px solid rgba(201,118,29,.34);color:#4f7d10}
+.pl .badge .bi{background:rgba(255,255,255,.62);border:1px solid rgba(75,58,143,.16);color:var(--leaf)}
+.pl .card .pill{background:rgba(255,255,255,.86);border:1px solid rgba(201,118,29,.34);color:var(--leaf)}
 .pl .card .shot{background:linear-gradient(160deg,rgba(255,255,255,.60),rgba(236,230,247,.42));
   border:1px solid rgba(75,58,143,.10)}
-.pl .tier .tag,.pl .combo .prow em{background:rgba(201,118,29,.14);border:1px solid rgba(201,118,29,.34);color:#4f7d10}
+.pl .tier .tag,.pl .combo .prow em{background:rgba(201,118,29,.14);border:1px solid rgba(201,118,29,.34);color:var(--leaf)}
 .pl .tier.best,.pl .combo.hero-combo{border-color:rgba(201,118,29,.46);
   box-shadow:0 22px 54px rgba(58,44,112,.14),0 0 0 1px rgba(201,118,29,.24),var(--g-inset)}
 .pl .combo .tray{background:linear-gradient(162deg,rgba(255,255,255,.56),rgba(236,230,247,.34));
   border-bottom:1px solid rgba(75,58,143,.12)}
-.pl .combo .save{background:rgba(255,255,255,.84);border:1px solid rgba(201,118,29,.34);color:#4f7d10}
+.pl .combo .save{background:rgba(255,255,255,.84);border:1px solid rgba(201,118,29,.34);color:var(--leaf)}
 .pl .combo .flag{background:linear-gradient(135deg,#00706a,#004b46);color:#f4fdf6}
-.pl .stack .it .tile{background:rgba(255,255,255,.5);border:1px dashed rgba(75,58,143,.26);color:#4f7d10}
+.pl .stack .it .tile{background:rgba(255,255,255,.5);border:1px dashed rgba(75,58,143,.26);color:var(--leaf)}
 .pl .tierpix{background:linear-gradient(162deg,rgba(255,255,255,.54),rgba(236,230,247,.34));
   border:1px solid rgba(75,58,143,.11)}
 .pl .hdots button{background:rgba(75,58,143,.22)}
 .pl .hdots button.on{background:#b8701c}
 .pl .hdots button:hover{background:rgba(75,58,143,.4)}
 .pl .badge+.badge{border-top:1px solid rgba(75,58,143,.12)}
-.pl .trust-i svg,.pl .rcard .who svg,.pl .tier li svg{color:#4f7d10}
+.pl .trust-i svg,.pl .rcard .who svg,.pl .tier li svg{color:var(--leaf)}
 .pl .revhead .st,.pl .rcard .st,.pl .voice .st{color:#7a9c1e}
 .pl .rcard .who b{color:#01423b}
 .pl footer{background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(214,241,221,.90));
   border-top:1px solid rgba(75,58,143,.13)}
-.pl :focus-visible{outline:2px solid #4f7d10}
+.pl :focus-visible{outline:2px solid var(--leaf)}
 .pl .crow .pimg{filter:drop-shadow(0 4px 7px rgba(0,74,66,.14))}
 .pl .qty{background:rgba(255,255,255,.56);border:1px solid rgba(75,58,143,.18)}
 .pl .qty button:hover{background:rgba(75,58,143,.10)}
@@ -524,7 +528,7 @@
 .pl .ptag .val s{font-size:12px;color:var(--paper-3)}
 .pl .ptag .cut{display:inline-block;margin-top:7px;font-size:8.4px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
   padding:3px 8px;border-radius:999px;background:rgba(240,160,60,.20);border:1px solid rgba(240,160,60,.38);color:var(--accent)}
-.pl .ptag .cut{background:rgba(201,118,29,.16);border:1px solid rgba(201,118,29,.36);color:#4f7d10}
+.pl .ptag .cut{background:rgba(201,118,29,.16);border:1px solid rgba(201,118,29,.36);color:var(--leaf)}
 @media(max-width:900px){
   .pl .ptag{padding:9px 12px 10px;border-radius:14px;max-width:58%}
   .pl .ptag .val strong{font-size:20px}
@@ -543,7 +547,7 @@
   color:var(--paper-2);
 }
 .pl .ticker .track{display:inline-flex;gap:40px;padding:9px 20px;animation:pl-tick 30s linear infinite}
-.pl .ticker b{color:#4f7d10;font-weight:700}
+.pl .ticker b{color:var(--leaf);font-weight:700}
 @keyframes pl-tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 .pl .pl-nav{position:sticky;top:0;z-index:50;padding:10px 14px}
