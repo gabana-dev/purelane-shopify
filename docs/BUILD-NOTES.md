@@ -94,7 +94,7 @@ background sequence is wrong.
 The visible consequence was the hero rendering on white. Rather than leave that, the hero
 now owns its own gradient and overlay: identical output, no cross-section coupling.
 
-## Three bugs worth reporting on myself
+## Four bugs worth reporting on myself
 
 **An unterminated quote silently discarded the entire stylesheet.** When merging the two
 `:root` blocks my script split declarations on `;` — which also appears inside
@@ -116,6 +116,23 @@ became unreachable, by keyboard or otherwise, for exactly the visitors the media
 meant to protect. The rail is `overflow-x:auto` under reduced motion now. Worth naming
 because it is the failure mode of accessibility work done rule-by-rule: each rule was
 satisfied and the outcome was still worse.
+
+**The lifecycle design was right and the include strategy defeated it.** Found in the final
+review pass, and the most instructive of the four. `snippets/purelane-assets.liquid` is
+rendered by *every* Purelane section so the sections stay self-contained and drop into any
+template without editing `theme.liquid`. The browser fetches `purelane.js` once — but it
+executes the IIFE once per `<script>` tag, six times on this homepage. Each execution kept
+its own private `controllers` map and registered its own `shopify:section:load` listener, so
+six controllers bound to the same section and no copy's `destroy` could reach another copy's
+timers, observers or window listeners.
+
+Every controller was individually correct. The stacking came back through the packaging.
+A single `window.__purelaneBehaviour` guard makes the file idempotent: the first copy owns
+every section, the rest return immediately.
+
+I found it by counting `IntersectionObserver.observe` calls after dispatching one
+`shopify:section:load` — 30 where there should have been 5. Reading the code would not have
+shown it, because the code is not where the bug lives.
 
 ## Gaps — being straight about them
 

@@ -89,7 +89,23 @@ balanced braces and a passing validator. And the extraction keep-list silently d
 output. Audit it against the source — I wrote a script comparing every rule in the original
 stylesheet against ours, and it found four more dropped rules I hadn't noticed.
 
-**6. It over-engineers when unsupervised.** Left alone it produces a config system, a
+**6. Generated API calls have side effects nobody mentions.** The seeding script used
+`productSet` to create products. `productSet` turns *on* inventory tracking with a quantity
+of zero, so all twelve products came back sellable from the Admin API and read as **sold
+out** on the storefront. Nothing in the mutation says it will do that, and the agent that
+wrote the call had no reason to know. **Fix:** verify against the surface the customer
+actually sees, not the API's own response. The Admin API said everything was fine. Step 8 of
+`scripts/seed.py` now untracks every variant except the one product that is deliberately the
+sold-out edge case.
+
+**7. A correct component can still be wrong once packaged.** The last bug in this build was
+not in any controller — it was that `purelane.js` is included per section and therefore
+*executes* six times, giving six independent controller registries that cannot tear each
+other down. Every unit was right; the composition was wrong. **Fix:** the check that matters
+is behavioural and runs against the assembled page — count observers after one
+`shopify:section:load`, don't re-read the module.
+
+**8. It over-engineers when unsupervised.** Left alone it produces a config system, a
 utility layer and an abstraction for one caller. **Fix:** an explicit instruction that the
 simplest production-quality solution wins, and I delete anything with one call site.
 
@@ -137,6 +153,12 @@ cut, the fix-versus-preserve line, the lifecycle design, or reading what the her
 It would have got the lifecycle actively wrong and would have hardcoded the prices.
 
 The sharpest lesson from today is the second one in my list: **the dangerous output is not
-the one that errors, it's the one that looks right.** Both bugs that cost me real time were
-mechanical transforms producing plausible, structurally valid, silently wrong output. The
-leverage isn't in generating more — it's in building the check that catches it.
+the one that errors, it's the one that looks right.** Every bug that cost me real time was
+plausible, structurally valid and silently wrong — a CSS transform with balanced braces, a
+`productSet` call the Admin API reported as successful, a lifecycle module that was correct
+in isolation and duplicated six times by the include that shipped it.
+
+The last one is the sharpest version of it. Reviewing that file again would never have found
+the bug, because the bug was not in the file. What found it was asking the assembled page a
+question with a countable answer: dispatch one `shopify:section:load`, count the observers,
+expect five. The leverage isn't in generating more — it's in knowing which number to count.

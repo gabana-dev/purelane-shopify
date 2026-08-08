@@ -14,12 +14,13 @@ where the method fell short.
 
 | | |
 |---|---|
-| Theme-editor safety | 10 consecutive `shopify:section:load` events on the hero — carousel transition rate unchanged, 2 before and 2 after. No timer stacking. `unload` freezes it |
+| Theme-editor safety | One `shopify:section:load` initialises the hero exactly once — 5 observer registrations, not 30. Ten consecutive events give 50, so each re-render replaces the previous controller instead of stacking. This is the check that caught the duplicate-execution bug in the build notes |
 | Layout stability | **CLS 0**, zero layout-shift entries, across two loads |
 | Card contract | One card height across all 8 products at 500 / 768 / 1024 / 1440 — including the sold-out, the imageless and the 103-character title |
 | Horizontal overflow | None at any measured width. Every element past the viewport edge sits inside a clipping ancestor |
 | Contrast | **0 failures** across 530 elements at WCAG AA — after fixing one the prototype shipped at 4.38:1 |
-| Keyboard | 42 of 42 focusable elements take focus with a visible ring. Hero dots use roving `tabindex`; arrows move selection and focus |
+| Keyboard | Every focusable element in the Purelane sections takes focus with a visible ring. Hero dots use roving `tabindex` — exactly one tabbable — and arrows move both selection and focus |
+| Structure | One `h1`, no skipped levels, hero dots wired as a complete tab/tabpanel pair, compare-at prices labelled for screen readers |
 | Reduced motion | No parallax, no autoplay, both marquees frozen, reveals render final-state, manual controls still work |
 | Images | 24 of 24 carry `width` + `height`; 21 lazy; webfonts non-render-blocking |
 | CI | Theme Check + section-schema validation, green |
