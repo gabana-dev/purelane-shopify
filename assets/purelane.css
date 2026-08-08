@@ -535,7 +535,11 @@
  * It exists so a merchant who uploads a wide photo degrades to a smaller bottle rather
  * than to a group that slides under the badges.
  */
-.pl .hslide{display:flex;align-items:flex-end;justify-content:center;gap:0}
+/* Only the flex gap is set here. Alignment stays with the ported rule above, which is
+ * the prototype's own `justify-content:flex-end; padding-right:2%` — the bottle group is
+ * right-aligned in the stage, not centred. An earlier `justify-content:center` here was
+ * silently overriding it. */
+.pl .hslide{gap:0}
 .pl .hp{position:relative;flex:0 0 auto;height:92%;display:block;max-width:44%}
 .pl .hp img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:bottom center;
   filter:drop-shadow(0 14px 22px rgba(0,74,66,.15))}
@@ -690,7 +694,10 @@
 /* Opacity is raised just enough to stand in for the missing blur. The hue is the
  * prototype's own, because the surfaces these sit on are effectively flat here. */
 .pl .glass{background:linear-gradient(158deg,rgba(255,255,255,.92),rgba(240,248,242,.80) 58%,rgba(232,244,236,.76))}
-.pl .btn-ghost{background:rgba(255,255,255,.86)}
+/* The prototype's own .66, not the .86 the first pass raised it to. Ghost buttons sit on
+ * the hero's flat gradient, where a blurred .66 and an unblurred .66 are the same pixels,
+ * so the opacity bump bought nothing and cost colour accuracy. */
+.pl .btn-ghost{background:rgba(255,255,255,.66)}
 
 /* .glass-2 KEEPS ITS BLUR AND ITS COLOUR — this is where the first pass went too far.
  *
