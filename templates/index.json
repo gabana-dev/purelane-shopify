@@ -1,5 +1,58 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
+    "purelane_header": {
+      "type": "purelane-header",
+      "blocks": {
+        "m1": {
+          "type": "message",
+          "settings": {
+            "text": "Free shipping",
+            "highlight": "on every bundle across India"
+          }
+        },
+        "m2": {
+          "type": "message",
+          "settings": {
+            "text": "100% plant-based",
+            "highlight": "and non-toxic"
+          }
+        },
+        "m3": {
+          "type": "message",
+          "settings": {
+            "text": "Loved by",
+            "highlight": "30,000+ happy homes"
+          }
+        },
+        "m4": {
+          "type": "message",
+          "settings": {
+            "text": "Buy 3",
+            "highlight": "at flat ₹499"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ],
+      "settings": {
+        "brand_name": "Purelane",
+        "tagline": "Clean, simply",
+        "menu": "main-menu"
+      }
+    },
     "purelane_hero": {
       "type": "purelane-hero",
       "blocks": {
@@ -74,7 +127,8 @@
         "secondary_link": "",
         "autoplay": true,
         "autoplay_interval": 4,
-        "enable_parallax": true
+        "enable_parallax": true,
+        "tone": "4"
       }
     },
     "purelane_reviews": {
@@ -84,7 +138,8 @@
         "aggregate_rating": "4.8",
         "aggregate_label": "from 8,000+ reviews",
         "secondary_label": "Loved by 12 lakh+ homes",
-        "reviews": []
+        "reviews": [],
+        "tone": "1"
       }
     },
     "purelane_combos": {
@@ -114,7 +169,7 @@
         "c4": {
           "type": "combo",
           "settings": {
-            "product": "bathroom-deep-clean",
+            "product": "starter-box",
             "flag": ""
           }
         },
@@ -136,7 +191,8 @@
       "settings": {
         "kicker": "Pre-built to save you money",
         "heading": "Best selling combos",
-        "lede": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+        "lede": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own.",
+        "tone": "3"
       }
     },
     "purelane_bundles": {
@@ -193,7 +249,8 @@
       "settings": {
         "kicker": "Build your bundle",
         "heading": "One box. Every room.",
-        "lede": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+        "lede": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way.",
+        "tone": "3"
       }
     },
     "purelane_shop": {
@@ -206,51 +263,8 @@
         "columns_desktop": 4,
         "columns_mobile": "2",
         "show_rating": true,
-        "show_badge": true
-      }
-    },
-    "purelane_header": {
-      "type": "purelane-header",
-      "blocks": {
-        "m1": {
-          "type": "message",
-          "settings": {
-            "text": "Free shipping",
-            "highlight": "on every bundle across India"
-          }
-        },
-        "m2": {
-          "type": "message",
-          "settings": {
-            "text": "100% plant-based",
-            "highlight": "and non-toxic"
-          }
-        },
-        "m3": {
-          "type": "message",
-          "settings": {
-            "text": "Loved by",
-            "highlight": "30,000+ happy homes"
-          }
-        },
-        "m4": {
-          "type": "message",
-          "settings": {
-            "text": "Buy 3",
-            "highlight": "at flat ₹499"
-          }
-        }
-      },
-      "block_order": [
-        "m1",
-        "m2",
-        "m3",
-        "m4"
-      ],
-      "settings": {
-        "brand_name": "Purelane",
-        "tagline": "Clean, simply",
-        "menu": "main-menu"
+        "show_badge": true,
+        "tone": "3"
       }
     },
     "purelane_signup": {
