@@ -43,6 +43,14 @@ ART = {
     "and everyday family washing": ("p-laundry", None),
 }
 
+# Rendered aspect of each asset, used to tell already-correct art from the distorted
+# 0.652 everything shipped at on the first pass.
+ASPECT = {
+    "p-tap": 703 / 1100, "p-kitchen": 703 / 1100, "p-metal": 769 / 1100,
+    "p-wm": 676 / 1100, "p-dish": 686 / 1100, "p-handwash": 820 / 1100,
+    "p-laundry": 693 / 1100, "p-combo2": 1100 / 978, "p-eraser": 1100 / 834,
+}
+
 # The prototype's five combos, in its order, with its prices.
 COMBOS = [
     ("Kitchen essentials", "499", "897", "p-combo2",
@@ -84,7 +92,7 @@ def gql(token, query, variables=None):
 ALL_PRODUCTS = """
 { products(first: 60) {
     nodes { id title handle
-      media(first: 10) { nodes { id alt ... on MediaImage { image { url } } } }
+      media(first: 10) { nodes { id alt ... on MediaImage { image { url width height } } } }
       variants(first: 1) { nodes { id price compareAtPrice } } } } }"""
 
 DELETE_MEDIA = """
@@ -164,19 +172,30 @@ def main(token):
         if not p:
             log(f"  ? not found: {title[:44]}")
             continue
-        want = f"{RAW}/{card}.png"
+
+        want_aspect = ASPECT[card]
         have = [m for m in p["media"]["nodes"] if m.get("image")]
-        # Shopify rewrites the URL on upload, so compare on the alt we set instead.
-        if any(m.get("alt") == f"{title}|{card}" for m in have):
+        # Idempotency reads the image's own shape rather than a marker written into alt
+        # text: alt belongs to the customer using a screen reader, not to this script.
+        current_ok = any(
+            m["image"].get("height") and
+            abs(m["image"]["width"] / m["image"]["height"] - want_aspect) < 0.02
+            for m in have)
+        if current_ok:
             log(f"  = current: {title[:44]}")
-            continue
-        if have:
-            gql(token, DELETE_MEDIA, {"pid": p["id"], "ids": [m["id"] for m in have]})
-        gql(token, CREATE_MEDIA, {"id": p["id"], "media": [{
-            "originalSource": want, "mediaContentType": "IMAGE",
-            "alt": f"{title}|{card}"}]})
-        log(f"  + card art: {title[:44]}")
-        changed += 1
+        else:
+            # Upload first, delete second. Reversed, a failed upload leaves the product
+            # with no image at all on a live storefront.
+            res = gql(token, CREATE_MEDIA, {"id": p["id"], "media": [{
+                "originalSource": f"{RAW}/{card}.png",
+                "mediaContentType": "IMAGE", "alt": title}]})["productCreateMedia"]
+            if res["mediaUserErrors"]:
+                log(f"  ! {title[:40]}: {res['mediaUserErrors']} — old art left in place")
+                continue
+            if have:
+                gql(token, DELETE_MEDIA, {"pid": p["id"], "ids": [m["id"] for m in have]})
+            log(f"  + card art: {title[:44]}")
+            changed += 1
 
         if hero:
             f = gql(token, FILE_CREATE, {"files": [{
@@ -189,6 +208,7 @@ def main(token):
                     "ownerId": p["id"], "namespace": "custom", "key": "hero_image",
                     "type": "file_reference", "value": f["files"][0]["id"]}]})
                 log(f"    + hero art: {hero}")
+                changed += 1
 
     log("\n== combos ==")
     pubs = [{"publicationId": x["id"]}
@@ -220,7 +240,7 @@ def main(token):
         vid = res["product"]["variants"]["nodes"][0]["id"]
         gql(token, CREATE_MEDIA, {"id": pid, "media": [{
             "originalSource": f"{RAW}/{img}.png", "mediaContentType": "IMAGE",
-            "alt": f"{title}|{img}"}]})
+            "alt": title}]})
         gql(token, METAFIELDS, {"mf": [{
             "ownerId": pid, "namespace": "custom", "key": "combo_blurb",
             "type": "multi_line_text_field", "value": blurb}]})
