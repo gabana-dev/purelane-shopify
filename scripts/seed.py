@@ -164,26 +164,30 @@ PRODUCTS = [
 ]
 
 COMBOS = [
-    # The hero's middle rung. The prototype's bundle ladder is 1 bottle at 200/299,
-    # "Any 2 products" at 349/598 (save 249) and "Any 3 products" at 499/897 (save 398).
-    # Without a product at 349/598 the hero tier had to borrow the Laundry care set at
-    # 599 — which made two products cost more than three and inverted the whole ladder.
-    # It is seeded as a real product so the hero price still comes from platform data.
-    dict(title="Any 2 products", price="349", compare="598", img="p-combo2",
-         blurb="Pick any two Purelane products at one flat price.",
-         items=[0, 1]),
+    # The prototype's combos rail carries five cards, with these exact prices. The
+    # "Hard water solution kit" at 349/598 is also the hero's middle rung — the ladder is
+    # 200/299, 349/598 and 499/897 — so the hero reads its price from a real product
+    # rather than needing an invented one.
     dict(title="Kitchen essentials", price="499", compare="897", img="p-combo2",
          blurb="Includes: Foaming Kitchen Cleaner, Dishwash Gel & Tap Cleaner. "
                "Everything for a sparkling kitchen, no need to pick separately.",
          items=[1, 4, 0]),
-    dict(title="Laundry care set", price="599", compare="998", img="p-laundry",
-         blurb="Includes: Laundry Detergent & Liquid Handwash. Gentle on skin, "
-               "tough on everyday stains.",
-         items=[7, 5]),
-    dict(title="Whole home box", price="999", compare="1796", img="p-combo2",
-         blurb="Includes: Tap Cleaner, Kitchen Cleaner, Dishwash Gel & Floor Cleaner. "
-               "One box for every room.",
-         items=[0, 1, 4, 6]),
+    dict(title="Laundry care bundle", price="499", compare="947", img="p-laundry",
+         blurb="Includes: Laundry Detergent, Fabric Conditioner & Machine Cleaner "
+               "Powder. Softer, fresher wash, all in one box.",
+         items=[7, 5, 3]),
+    dict(title="Complete home bundle", price="799", compare="1495", img="p-combo2",
+         blurb="Includes: Kitchen Cleaner, Laundry Detergent, Floor Cleaner, Toilet "
+               "Cleaner & Handwash. Our biggest saving.",
+         items=[1, 7, 6, 5]),
+    dict(title="Bathroom deep clean", price="499", compare="897", img="p-eraser",
+         blurb="Includes: Toilet Cleaner, Tap Cleaner & Magic Eraser. A complete "
+               "bathroom refresh in one box.",
+         items=[0, 6]),
+    dict(title="Hard water solution kit", price="349", compare="598", img="p-combo2",
+         blurb="Includes: Tap Cleaner & Toilet Cleaner. A quick, focused fix for hard "
+               "water stains across the home.",
+         items=[0, 2]),
 ]
 
 REVIEWS = [

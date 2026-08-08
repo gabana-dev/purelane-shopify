@@ -237,6 +237,11 @@
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
 .pl .revtrack{display:flex;gap:12px;width:max-content;animation:marq 52s linear infinite}
+/* Each half of the track is one full set of reviews; -50% lands copy two exactly where
+ * copy one began. The gap has to match .revtrack's so the seam is invisible. */
+.pl .revset{display:flex;gap:12px;flex:0 0 auto;margin-right:12px}
+/* The clone is decorative: nothing inside it should take focus. */
+.pl .revset[aria-hidden="true"] a,.pl .revset[aria-hidden="true"] button{pointer-events:none}
 .pl .revrail:hover .revtrack,.pl .revrail:focus-within .revtrack{animation-play-state:paused}
 @keyframes marq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 .pl .rcard{flex:0 0 auto;width:284px;padding:15px 17px;border-radius:18px}
@@ -511,41 +516,29 @@
 /* Hero bundle slides: 1, 2 or 3 bottles staggered, matching the prototype's
    .hs2 / .hs3 layering.
  *
- * THE CONSTRAINT THE PROTOTYPE DIDN'T HAVE
- * The prototype's hero bottles are CSS backgrounds on spans with a fixed
- * `aspect-ratio:0.322` — tall, narrow art drawn for this stage. Ours are real product
- * images, because the brief requires the hero to render the merchant's own products, and
- * a merchant's product photo is whatever shape it is. The seeded art is 257x394 (0.652),
- * twice as wide per unit of height, so sizing purely by height blew each bottle out to
- * roughly double the intended width: the group overflowed the stage and the last bottle
- * slid underneath the promise badges.
+ * WHY THE ART CARRIES THE ASPECT
+ * The prototype draws these bottles as CSS backgrounds on spans with a fixed
+ * `aspect-ratio:0.322` — tall, narrow art specific to this stage, and different from the
+ * squatter art its product cards use. Ours are real <img> elements so the hero renders
+ * the merchant's own products, which means the aspect has to live in the asset instead
+ * of the CSS.
  *
- * Height still drives the stagger, but each bottle is now also capped by width as a
- * share of the stage, so art of any aspect stays inside its slot. The reserved gutter
- * below keeps the group clear of the badges regardless of how many bottles a slide has.
+ * It did not, at first. Every seed image was rendered onto one shared 600x920 canvas
+ * regardless of its source viewBox, so `p-tbtl` shipped at 0.652 instead of 0.322 and
+ * every hero bottle came out roughly twice as wide as drawn: the group overflowed the
+ * stage and the third bottle sat behind the promise badges. The card art survived it
+ * only because 0.639 happens to be close to 0.652. `seed-images/png` is now rendered per
+ * asset at its own viewBox, so the prototype's height percentages produce the
+ * prototype's widths and this file needs no correction factor.
+ *
+ * The one addition is a max-width ceiling set high enough never to bind on correct art.
+ * It exists so a merchant who uploads a wide photo degrades to a smaller bottle rather
+ * than to a group that slides under the badges.
  */
 .pl .hslide{display:flex;align-items:flex-end;justify-content:center;gap:0}
-.pl .hp{position:relative;flex:0 0 auto;height:92%;display:block;max-width:46%}
+.pl .hp{position:relative;flex:0 0 auto;height:92%;display:block;max-width:44%}
 .pl .hp img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:bottom center;
   filter:drop-shadow(0 14px 22px rgba(0,74,66,.15))}
-/* The badges panel is 96px wide at right:18px and floats over the stage. Reserve that
- * column so bottles are never hidden behind it. Below 900px the badges are display:none,
- * so the gutter goes with them. */
-@media(min-width:901px){
-  .pl .hslide{padding-right:104px}
-}
-/* The cap tightens as the group grows: three bottles plus their -8% overlaps must still
- * fit the stage once the badge gutter is reserved. One cap per slide would work but would
- * flatten the size stagger, so each position gets a cap in proportion to the height it is
- * already given above (75 : 97 : 79) — the tallest bottle stays the widest and the ladder
- * still reads as a ladder. Percentages resolve against the stage, so this holds at every
- * width rather than at the one viewport it was checked on. */
-.pl .hs1 .hp{max-width:62%}
-.pl .hs2 .a{max-width:34%}
-.pl .hs2 .b{max-width:42%}
-.pl .hs3 .a{max-width:27%}
-.pl .hs3 .c{max-width:35%}
-.pl .hs3 .b{max-width:29%}
 .pl .hs1 .hp{height:97%}
 .pl .hs2 .a{height:80%;margin-right:-8%;z-index:1}
 .pl .hs2 .b{height:97%;z-index:3}

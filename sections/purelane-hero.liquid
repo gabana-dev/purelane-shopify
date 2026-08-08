@@ -130,7 +130,19 @@
                     endcase
                     assign pos = positions[forloop.index0]
                   -%}
-                  {%- if item != blank and item.featured_image != blank -%}
+                  {%- liquid
+                    # The prototype draws the hero with tall, narrow bottle art (aspect
+                    # 0.322) that is deliberately different from the squatter art on its
+                    # product cards. A product can carry both: custom.hero_image is the
+                    # stage rendering, and the card keeps the catalogue shot. Falling back
+                    # to featured_image means a merchant who never sets one still gets a
+                    # hero, just in the card's proportions.
+                    assign hero_img = item.metafields.custom.hero_image.value
+                    if hero_img == blank
+                      assign hero_img = item.featured_image
+                    endif
+                  -%}
+                  {%- if item != blank and hero_img != blank -%}
                     {%- liquid
                       if forloop.first
                         assign img_loading = 'eager'
@@ -142,7 +154,7 @@
                     -%}
                     <span class="hp {{ pos }} d{{ forloop.index }}">
                       {{
-                        item.featured_image
+                        hero_img
                         | image_url: width: 700
                         | image_tag:
                           loading: img_loading,

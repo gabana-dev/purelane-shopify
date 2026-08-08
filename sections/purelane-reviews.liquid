@@ -63,30 +63,49 @@
     </div>
 
     <div class="revrail rv" tabindex="0" role="group" aria-label="Customer reviews">
+      {%- comment -%}
+        The marquee animates to translateX(-50%), so the track has to hold TWO copies of
+        the set — at the halfway point copy two is exactly where copy one started and the
+        loop is seamless. Rendering the reviews once meant the animation ran the track
+        clean off its own content and left a growing empty gap at the tail.
+
+        The second copy is aria-hidden and its cards are removed from the tab order, so
+        the duplication is purely visual: a screen reader and a keyboard user each meet
+        every review exactly once.
+      {%- endcomment -%}
       <div class="revtrack">
-        {%- if use_blocks -%}
-          {%- for block in section.blocks -%}
-            <article class="glass-2 rcard" {{ block.shopify_attributes }}>
-              {%- render 'purelane-review-card',
-                    rating: block.settings.rating,
-                    title: block.settings.title,
-                    body: block.settings.body,
-                    author: block.settings.author,
-                    context: block.settings.context -%}
-            </article>
-          {%- endfor -%}
-        {%- else -%}
-          {%- for review in reviews -%}
-            <article class="glass-2 rcard">
-              {%- render 'purelane-review-card',
-                    rating: review.rating,
-                    title: review.title,
-                    body: review.body,
-                    author: review.author,
-                    context: review.context -%}
-            </article>
-          {%- endfor -%}
-        {%- endif -%}
+        {%- for pass in (1..2) -%}
+          {%- assign is_clone = false -%}
+          {%- if pass == 2 -%}
+            {%- assign is_clone = true -%}
+          {%- endif -%}
+          <div class="revset"
+            {% if is_clone %}aria-hidden="true"{% endif %}>
+            {%- if use_blocks -%}
+              {%- for block in section.blocks -%}
+                <article class="glass-2 rcard" {% unless is_clone %}{{ block.shopify_attributes }}{% endunless %}>
+                  {%- render 'purelane-review-card',
+                        rating: block.settings.rating,
+                        title: block.settings.title,
+                        body: block.settings.body,
+                        author: block.settings.author,
+                        context: block.settings.context -%}
+                </article>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for review in reviews -%}
+                <article class="glass-2 rcard">
+                  {%- render 'purelane-review-card',
+                        rating: review.rating,
+                        title: review.title,
+                        body: review.body,
+                        author: review.author,
+                        context: review.context -%}
+                </article>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
       </div>
     </div>
   </section>
