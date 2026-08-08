@@ -683,14 +683,34 @@
  * a visual near-tie for a large, measurable performance win.
  * ------------------------------------------------------------------------- */
 .pl .glass,
-.pl .glass-2,
 .pl .btn-ghost{
   backdrop-filter:none;
   -webkit-backdrop-filter:none;
 }
+/* Opacity is raised just enough to stand in for the missing blur. The hue is the
+ * prototype's own, because the surfaces these sit on are effectively flat here. */
 .pl .glass{background:linear-gradient(158deg,rgba(255,255,255,.92),rgba(240,248,242,.80) 58%,rgba(232,244,236,.76))}
-.pl .glass-2{background:linear-gradient(158deg,rgba(255,255,255,.88),rgba(240,248,242,.74))}
 .pl .btn-ghost{background:rgba(255,255,255,.86)}
+
+/* .glass-2 KEEPS ITS BLUR AND ITS COLOUR — this is where the first pass went too far.
+ *
+ * The optimisation above also flattened .glass-2 to an 88%-opaque white-green. That is
+ * not a near-tie: .glass-2 is the hero's promise panel and price tag, the two surfaces
+ * with a purple bottle moving underneath them. The prototype's lilac at 66/44% lets the
+ * bottle read through; ours hid it, and it buried the .12-opacity dividers between the
+ * badges along with it. Trading a visible design property for frame budget is the
+ * "rebuilt it how I'd have designed it" failure the brief warns about, so the blur and
+ * the exact gradient are restored here.
+ *
+ * The performance win is mostly intact regardless: .glass and .btn-ghost are ~29 of the
+ * ~40 blurred surfaces on the page, and .glass-2 is 9. */
+.pl .glass-2{
+  background:linear-gradient(158deg,rgba(255,255,255,.66),rgba(236,230,247,.44));
+  backdrop-filter:blur(12px) saturate(130%);
+  -webkit-backdrop-filter:blur(12px) saturate(130%);
+  border:1px solid rgba(75,58,143,.13);
+  box-shadow:0 16px 38px rgba(58,44,112,.10),inset 0 1px 0 rgba(255,255,255,.86);
+}
 
 /* One texture layer instead of two; the second was imperceptible and doubled
    the paint area. */
