@@ -36,19 +36,31 @@
         "s1": {
           "type": "slide",
           "settings": {
-            "product": "tap-cleaner-limescale-remover"
+            "label": "Single bottle",
+            "price_product": "tap-cleaner-limescale-remover",
+            "product_1": "tap-cleaner-limescale-remover",
+            "product_2": "",
+            "product_3": ""
           }
         },
         "s2": {
           "type": "slide",
           "settings": {
-            "product": "kitchen-cleaner-foaming"
+            "label": "Any 2 products",
+            "price_product": "laundry-care-set",
+            "product_1": "tap-cleaner-limescale-remover",
+            "product_2": "kitchen-cleaner-foaming",
+            "product_3": ""
           }
         },
         "s3": {
           "type": "slide",
           "settings": {
-            "product": "organic-dishwash-liquid-gel"
+            "label": "Any 3 products",
+            "price_product": "kitchen-essentials",
+            "product_1": "tap-cleaner-limescale-remover",
+            "product_2": "kitchen-cleaner-foaming",
+            "product_3": "organic-dishwash-liquid-gel"
           }
         }
       },
@@ -65,9 +77,9 @@
         "heading_line_2": "That",
         "heading_highlight": "Lasts",
         "lede": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
-        "primary_label": "Shop bestsellers",
+        "primary_label": "Shop now",
         "primary_link": "",
-        "secondary_label": "Build a bundle",
+        "secondary_label": "How it works",
         "secondary_link": "",
         "autoplay": true,
         "autoplay_interval": 4,
@@ -87,37 +99,29 @@
     "purelane_combos": {
       "type": "purelane-combos",
       "blocks": {
-        "combo_93JTjW": {
-          "type": "combo",
-          "settings": {
-            "product": "kitchen-essentials",
-            "flag": ""
-          }
-        },
         "c1": {
           "type": "combo",
           "settings": {
-            "product": "laundry-care-set",
+            "product": "kitchen-essentials",
             "flag": "Most popular"
           }
         },
         "c2": {
           "type": "combo",
           "settings": {
-            "product": "whole-home-box",
+            "product": "laundry-care-set",
             "flag": ""
           }
         },
         "c3": {
           "type": "combo",
           "settings": {
-            "product": "",
-            "flag": ""
+            "product": "whole-home-box",
+            "flag": "Best value"
           }
         }
       },
       "block_order": [
-        "combo_93JTjW",
         "c1",
         "c2",
         "c3"
@@ -153,7 +157,7 @@
             "quantity": 3,
             "price": "",
             "compare_at_price": "",
-            "features": "Pick any two products\nFree shipping across India",
+            "features": "Pick any three products\nFree shipping across India\nBest value per bottle",
             "highlight": true,
             "cta": "Build this box",
             "link": ""
@@ -164,10 +168,10 @@
           "settings": {
             "tag": "Best value",
             "product": "whole-home-box",
-            "quantity": 5,
+            "quantity": 4,
             "price": "",
             "compare_at_price": "",
-            "features": "Pick any two products\nFree shipping across India",
+            "features": "Pick any four products\nFree shipping across India\nOne box for every room",
             "highlight": false,
             "cta": "Build this box",
             "link": ""
