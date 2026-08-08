@@ -10,8 +10,7 @@
   product represents the tier yet, and the editor says so.
 {% endcomment %}
 
-{{ 'purelane.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+{% render 'purelane-assets' %}
 
 <div class="pl">
   <section

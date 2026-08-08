@@ -11,8 +11,7 @@
   scrolls with a trackpad, drag or keyboard, and costs nothing on the main thread.
 {% endcomment %}
 
-{{ 'purelane.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+{% render 'purelane-assets' %}
 
 {%- liquid
   assign reviews = section.settings.reviews.value

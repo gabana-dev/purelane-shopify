@@ -7,8 +7,7 @@
   erroring — a merchant mid-setup should never see a broken page.
 {% endcomment %}
 
-{{ 'purelane.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+{% render 'purelane-assets' %}
 
 {%- liquid
   assign collection = collections[section.settings.collection]

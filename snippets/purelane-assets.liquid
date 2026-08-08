@@ -1,0 +1,27 @@
+{% comment %}
+  Loads the Purelane stylesheet, script and webfonts.
+
+  Rendered by every Purelane section rather than added to theme.liquid, so the sections
+  stay self-contained and drop into any template without editing the layout. The browser
+  de-duplicates identical URLs, so rendering this five times costs one request each.
+
+  Fonts: the prototype used a render-blocking @import in <head>. Preconnect plus a
+  stylesheet link with display=swap lets text paint immediately in the fallback face and
+  swap when the webfont arrives, which is the difference between a fast LCP and a blank
+  heading.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+  media="print"
+  onload="this.media='all'"
+>
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+</noscript>
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>

@@ -9,8 +9,7 @@
   product's own image and changes when merchandising changes.
 {% endcomment %}
 
-{{ 'purelane.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+{% render 'purelane-assets' %}
 
 {%- liquid
   assign badge_blocks = section.blocks | where: 'type', 'badge'
@@ -78,14 +77,20 @@
         <div class="hero-prod" data-parallax>
           <div class="hstage">
             {%- for block in slide_blocks -%}
-              {%- assign slide_product = all_products[block.settings.product] -%}
+              {%- liquid
+                assign slide_product = all_products[block.settings.product]
+                assign has_image = false
+                if slide_product != blank and slide_product.featured_image != blank
+                  assign has_image = true
+                endif
+              -%}
               <div
                 class="hslide {% if forloop.first %}on{% endif %}"
                 data-slide
                 aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
                 {{ block.shopify_attributes }}
               >
-                {%- if slide_product.featured_image -%}
+                {%- if has_image -%}
                   {%- comment -%}
                     The hero image is the page's LCP element, so the first slide loads
                     eagerly at high priority and the rest stay lazy.
