@@ -139,7 +139,7 @@
           "type": "tier",
           "settings": {
             "tag": "Starter",
-            "product": "laundry-care-set",
+            "product": "starter-box",
             "quantity": 2,
             "price": "",
             "compare_at_price": "",
@@ -166,12 +166,12 @@
         "t3": {
           "type": "tier",
           "settings": {
-            "tag": "Best value",
+            "tag": "Whole home",
             "product": "whole-home-box",
-            "quantity": 4,
+            "quantity": 5,
             "price": "",
             "compare_at_price": "",
-            "features": "Pick any four products\nFree shipping across India\nOne box for every room",
+            "features": "Pick any five products\nFree shipping across India\nOne box for every room",
             "highlight": false,
             "cta": "Build this box",
             "link": ""
