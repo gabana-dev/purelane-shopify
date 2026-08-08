@@ -1,40 +1,203 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "purelane_hero": {
       "type": "purelane-hero",
       "blocks": {
-        "b1": { "type": "badge", "settings": { "icon": "leaf", "label": "Plant powered" } },
-        "b2": { "type": "badge", "settings": { "icon": "shield", "label": "Safe for kids & pets" } },
-        "b3": { "type": "badge", "settings": { "icon": "no-chemicals", "label": "Zero harsh chemicals" } },
-        "s1": { "type": "slide", "settings": {} },
-        "s2": { "type": "slide", "settings": {} },
-        "s3": { "type": "slide", "settings": {} }
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "label": "Plant powered"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "label": "Safe for kids & pets"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "icon": "no-chemicals",
+            "label": "Zero harsh chemicals"
+          }
+        },
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "product": "tap-cleaner-limescale-remover"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "product": "kitchen-cleaner-foaming"
+          }
+        },
+        "s3": {
+          "type": "slide",
+          "settings": {
+            "product": "organic-dishwash-liquid-gel"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "s1", "s2", "s3"],
-      "settings": {}
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "heading_line_1": "Clean",
+        "heading_line_2": "That",
+        "heading_highlight": "Lasts",
+        "lede": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
+        "primary_label": "Shop bestsellers",
+        "primary_link": "",
+        "secondary_label": "Build a bundle",
+        "secondary_link": "",
+        "autoplay": true,
+        "autoplay_interval": 4,
+        "enable_parallax": true
+      }
     },
-    "purelane_reviews": { "type": "purelane-reviews", "settings": {} },
+    "purelane_reviews": {
+      "type": "purelane-reviews",
+      "settings": {
+        "kicker": "That's what they said",
+        "aggregate_rating": "4.8",
+        "aggregate_label": "from 8,000+ reviews",
+        "secondary_label": "Loved by 12 lakh+ homes",
+        "reviews": []
+      }
+    },
     "purelane_combos": {
       "type": "purelane-combos",
       "blocks": {
-        "c1": { "type": "combo", "settings": { "flag": "Most popular" } },
-        "c2": { "type": "combo", "settings": {} },
-        "c3": { "type": "combo", "settings": {} }
+        "combo_93JTjW": {
+          "type": "combo",
+          "settings": {
+            "product": "kitchen-essentials",
+            "flag": ""
+          }
+        },
+        "c1": {
+          "type": "combo",
+          "settings": {
+            "product": "laundry-care-set",
+            "flag": "Most popular"
+          }
+        },
+        "c2": {
+          "type": "combo",
+          "settings": {
+            "product": "whole-home-box",
+            "flag": ""
+          }
+        },
+        "c3": {
+          "type": "combo",
+          "settings": {
+            "product": "",
+            "flag": ""
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3"],
-      "settings": {}
+      "block_order": [
+        "combo_93JTjW",
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "kicker": "Pre-built to save you money",
+        "heading": "Best selling combos",
+        "lede": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+      }
     },
     "purelane_bundles": {
       "type": "purelane-bundles",
       "blocks": {
-        "t1": { "type": "tier", "settings": { "tag": "Starter", "quantity": 2 } },
-        "t2": { "type": "tier", "settings": { "tag": "Most popular", "quantity": 3, "highlight": true } },
-        "t3": { "type": "tier", "settings": { "tag": "Best value", "quantity": 5 } }
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "tag": "Starter",
+            "product": "laundry-care-set",
+            "quantity": 2,
+            "price": "",
+            "compare_at_price": "",
+            "features": "Pick any two products\nFree shipping across India",
+            "highlight": false,
+            "cta": "Build this box",
+            "link": ""
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "tag": "Most popular",
+            "product": "kitchen-essentials",
+            "quantity": 3,
+            "price": "",
+            "compare_at_price": "",
+            "features": "Pick any two products\nFree shipping across India",
+            "highlight": true,
+            "cta": "Build this box",
+            "link": ""
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "tag": "Best value",
+            "product": "whole-home-box",
+            "quantity": 5,
+            "price": "",
+            "compare_at_price": "",
+            "features": "Pick any two products\nFree shipping across India",
+            "highlight": false,
+            "cta": "Build this box",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3"],
-      "settings": {}
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "settings": {
+        "kicker": "Build your bundle",
+        "heading": "One box. Every room.",
+        "lede": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+      }
     },
-    "purelane_shop": { "type": "purelane-shop", "settings": {} }
+    "purelane_shop": {
+      "type": "purelane-shop",
+      "settings": {
+        "kicker": "Bestsellers",
+        "heading": "Loved by 30,000 homes",
+        "collection": "bestsellers",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_rating": true,
+        "show_badge": true
+      }
+    }
   },
   "order": [
     "purelane_hero",
