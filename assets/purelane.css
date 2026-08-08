@@ -533,8 +533,13 @@
  * so the gutter goes with them. */
 @media(min-width:901px){
   .pl .hslide{padding-right:104px}
-  .pl .hs1 .hp{max-width:62%}
 }
+/* The cap has to tighten as the group grows: three bottles plus their -8% overlaps must
+ * still fit the stage once the badge gutter is reserved. Percentages resolve against the
+ * stage, so these hold at every width rather than at one tested viewport. */
+.pl .hs1 .hp{max-width:62%}
+.pl .hs2 .hp{max-width:38%}
+.pl .hs3 .hp{max-width:30%}
 .pl .hs1 .hp{height:97%}
 .pl .hs2 .a{height:80%;margin-right:-8%;z-index:1}
 .pl .hs2 .b{height:97%;z-index:3}
