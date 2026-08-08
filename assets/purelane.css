@@ -464,3 +464,28 @@
 @media(max-width:760px){
   .pl .sec-pad{padding:22px 18px}
 }
+
+/* ---------------------------------------------------------------------------
+ * Hero background.
+ *
+ * In the prototype this came from a page-level fixed "scene" layer that all
+ * sections shared. That layer is deliberately not ported (it breaks section
+ * independence in the theme editor), so the hero owns its own background here —
+ * same gradient, same overlay, but scoped to the section that uses it. This is
+ * the architecturally correct version of the same visual.
+ * ------------------------------------------------------------------------- */
+.pl .hero{
+  background:linear-gradient(178deg,#fbfffb 0%,#eafaec 24%,#d6f1dc 54%,#bfe8ca 100%);
+  overflow:hidden;
+}
+.pl .hero::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(102deg,rgba(255,255,255,.80) 0%,rgba(255,255,255,.50) 30%,
+             rgba(255,255,255,.12) 54%,transparent 68%);
+}
+@media(max-width:760px){
+  .pl .hero::before{
+    background:linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.34) 36%,
+               rgba(255,255,255,.66) 100%);
+  }
+}
