@@ -58,7 +58,12 @@ base64 data-URIs is in `seed-images/` so the store matches the design.
 
 ## Honest status
 
-The five required sections are built, and the store setup is documented and reproducible.
-What I have **not** done is the live visual diff against the prototype at every breakpoint
-on a running store — the verification checklist in `SETUP.md` exists precisely because that
-pass is outstanding. Details in the gaps section of the build notes.
+The five required sections are built, the store setup is documented and reproducible, and
+the verification checklist in `SETUP.md` has been run on the live store — including the
+keyboard and reduced-motion passes, each marked with how it was measured and where the
+method fell short of the real thing. That pass found one real defect, since fixed: with
+motion off, the reviews marquee froze and took every review past the fold out of reach.
+
+What remains open is a spacing-by-spacing diff against the prototype, and 375px
+specifically, which Chrome's 500px minimum window width put out of range. Details in the
+gaps section of the build notes.

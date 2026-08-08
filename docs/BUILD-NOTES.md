@@ -87,7 +87,7 @@ background sequence is wrong.
 The visible consequence was the hero rendering on white. Rather than leave that, the hero
 now owns its own gradient and overlay: identical output, no cross-section coupling.
 
-## Two bugs worth reporting on myself
+## Three bugs worth reporting on myself
 
 **An unterminated quote silently discarded the entire stylesheet.** When merging the two
 `:root` blocks my script split declarations on `;` — which also appears inside
@@ -102,6 +102,14 @@ over, and it rendered as unstyled text in the wrong corner. Auditing the extract
 the original stylesheet, rather than trusting it, found that plus `.sec-pad`, `.hs1 .a` and
 the reviews-rail pause-on-hover. That audit is the reusable artifact here.
 
+**Respecting reduced motion made a section unreachable.** The reviews rail is a marquee: it
+clips its overflow and relies on the animation to bring later cards into view. Honouring
+`prefers-reduced-motion` freezes that animation — which meant every review past the fold
+became unreachable, by keyboard or otherwise, for exactly the visitors the media query is
+meant to protect. The rail is `overflow-x:auto` under reduced motion now. Worth naming
+because it is the failure mode of accessibility work done rule-by-rule: each rule was
+satisfied and the outcome was still worse.
+
 ## Gaps — being straight about them
 
 - **Store availability took an hour of store configuration, not code.** Every product read
@@ -113,8 +121,12 @@ the reviews-rail pause-on-hover. That audit is the reusable artifact here.
 - **The store's nav menu is Dawn's default** (Home / Catalog / Contact) rather than the
   prototype's five links, because those link to sections that were out of scope. The header
   reads the menu from Shopify Navigation, so it is a content change, not a code change.
-- **Not pixel-diffed at every breakpoint.** Compared side by side in a browser at 1440 and
-  ~500px and section by section against the prototype, but not measured spacing-by-spacing.
+- **Not pixel-diffed against the prototype.** Measured on the live store at 500 / 768 /
+  1024 / 1440 — no page-level horizontal overflow at any width, card height one value per
+  width across all eight products including the three edge cases — but that is the layout
+  holding, not a spacing-by-spacing diff against the original file. 375 specifically was
+  not measured: Chrome's minimum window width on macOS is 500, and I would rather say so
+  than round it down on the checklist.
 - Only the five required sections plus the bonus header were built; the other seven in the
   file are untouched.
 

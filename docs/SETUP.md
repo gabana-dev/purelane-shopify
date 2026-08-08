@@ -101,7 +101,13 @@ Run before handing over. Each item maps to an acceptance criterion in the PRD.
 Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
 
 - [x] Compared side by side against the prototype in a browser at 1440 and ~500px
-- [ ] Measured spacing-by-spacing at 375 / 768 / 1024 / 1440
+- [x] Measured at 500 / 768 / 1024 / 1440: no page-level horizontal overflow at any width
+      (`scrollWidth == clientWidth`), and every element crossing the viewport edge sits
+      inside a clipping ancestor — the ticker, the reviews rail or the hero badge strip.
+      Card height is one value per width across all eight products, including the three
+      edge cases. Shop grid is 4-up at 1024 and 1440. **375 not measured** — Chrome's
+      minimum window width on macOS is 500, so the narrowest real viewport available was
+      500. Device emulation would close this
 - [x] Sold-out product shows a disabled "Sold out" button, card height unchanged
 - [x] Imageless product shows the placeholder, grid stays aligned
 - [x] 103-character title clamps to two lines, card height unchanged
@@ -114,5 +120,23 @@ Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
 - [x] `shopify:section:unload` freezes the carousel — teardown confirmed
 - [x] No horizontal overflow; 24 images all carry `srcset`, `width` and `height`
 - [x] 10 add-to-cart forms, 1 disabled button (the sold-out product)
-- [ ] Keyboard pass through hero dots, card links and both rails
-- [ ] OS "reduce motion" on → no parallax, no autoplay, content fully visible
+- [x] Keyboard pass: all 42 focusable elements on the page take focus and every one of
+      them paints a visible focus ring, except two that belong to Dawn (the skip link and
+      Dawn's search input, which uses a box-shadow focus style rather than an outline).
+      Hero dots implement roving `tabindex` correctly — exactly one is tabbable,
+      `aria-selected` tracks it, and Arrow Left/Right move both the selection and the
+      focus. **Caveat on method:** the automation harness could not deliver a real `Tab`
+      keypress to the page, so focus order was read from the DOM and each stop was
+      focused programmatically rather than walked with the key itself
+- [x] "Reduce motion" on → no parallax (hero transform stays `none` across a 600px
+      scroll), no autoplay (hero stayed on slide 0 for 9s, 2.4 intervals' worth), both
+      marquees frozen (`getAnimations()` empty on the ticker and the reviews track),
+      reveals rendered in their final state immediately rather than waiting on an
+      observer, and the dot controls still work manually. **Caveat on method:** forced by
+      overriding `MediaQueryList.matches` and re-emitting the `prefers-reduced-motion`
+      blocks unconditionally, then re-dispatching `shopify:section:load` — not by toggling
+      the OS setting, which the harness cannot reach
+- [x] Reviews rail is reachable with motion off. It was not: the rail is a marquee, so it
+      clips its overflow and relies on the animation to bring later cards into view —
+      freeze the animation and every review past the fold became unreachable. Now
+      `overflow-x:auto` under `prefers-reduced-motion`. Found by this pass

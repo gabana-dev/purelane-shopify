@@ -594,6 +594,11 @@
 }
 @media(prefers-reduced-motion:reduce){
   .pl .ticker .track{animation:none}
+  /* The reviews rail is a marquee, so it clips its overflow and relies on the
+   * animation to bring later cards into view. With motion off the animation is
+   * frozen, which would leave every review past the fold unreachable — by
+   * keyboard or otherwise. Hand scrolling back to the visitor instead. */
+  .pl .revrail{overflow-x:auto}
 }
 
 /* ---------------------------------------------------------------------------
