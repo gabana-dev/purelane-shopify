@@ -117,7 +117,14 @@
                 </ul>
               {%- endif -%}
 
-              <a class="btn btn-ghost" href="{{ block.settings.link | default: '#shop' }}">
+              {%- comment -%}
+                The highlighted tier gets the primary treatment, as in the prototype —
+                a pricing table needs one obvious call to action, not three equal ones.
+              {%- endcomment -%}
+              <a
+                class="btn {% if block.settings.highlight %}btn-primary{% else %}btn-ghost{% endif %}"
+                href="{{ block.settings.link | default: '#shop' }}"
+              >
                 {{ block.settings.cta | default: 'Build this box' }}
               </a>
             </article>
