@@ -394,11 +394,20 @@
 .pl .card__link{display:block;color:inherit;text-decoration:none}
 .pl .card__link:focus-visible{outline:2px solid var(--brand);outline-offset:4px;border-radius:var(--r-sm)}
 
-/* Real product images sit where the prototype used a CSS background. Fixed aspect
-   ratio so the grid never shifts while images load. */
+/* Real product images sit where the prototype used a CSS background.
+ *
+ * The prototype's `.pimg` is a background at `background-size:contain` inside a
+ * fixed-height `.shot`, so the whole bottle always fits. Reproducing that with an <img>
+ * needs the image bounded by the BOX, not by its own ratio: `aspect-ratio:130/200` on a
+ * 100%-wide image made it 368px tall in a 150px frame, and `.shot`'s overflow:hidden
+ * quietly cropped every card to the top of its bottle — visible only once the detailed
+ * art arrived with its label near the bottom.
+ *
+ * There is no layout shift to protect against here: `.shot` has a fixed height, and
+ * `image_tag` emits width and height attributes, so the ratio is known before load. */
 .pl .shot img,
 .pl .card__image{
-  display:block;width:100%;height:auto;aspect-ratio:130/200;
+  display:block;width:100%;height:100%;
   object-fit:contain;margin-inline:auto;
 }
 
