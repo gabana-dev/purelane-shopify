@@ -139,6 +139,14 @@ Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
       In place matters: re-emitting the blocks from an appended `<style>` moves them to the
       end of the document and silently changes which rule wins a specificity tie, so the
       first run of this check reported a false failure on the rail
+- [x] Contrast: every text node under `.pl` audited against its computed background at
+      WCAG AA (4.5:1 small, 3:1 large), visually-hidden labels excluded. **Zero failures**
+      — after fixing one: the prototype's `#4f7d10` came in at 4.38:1. See flag 8 in the
+      build notes
+- [x] CLS measured at **0** across two loads, no layout-shift entries at all. All 24 images
+      carry `width` and `height`, 21 of 24 lazy-loaded, webfonts non-render-blocking via
+      `media="print"` + `onload`. **Not a Lighthouse run** — no throttled mobile profile,
+      and LCP did not report reliably from an automated tab, so there is no LCP number here
 - [x] Reviews rail is reachable with motion off. It was not: the rail is a marquee, so it
       clips its overflow and relies on the animation to bring later cards into view —
       freeze the animation and every review past the fold became unreachable. Now

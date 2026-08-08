@@ -41,6 +41,13 @@ rules with staggered heights and z-order exist precisely to stack two or three b
 I built it as "rotate through featured products", realised the error when comparing against
 the prototype in a browser, and rebuilt it.
 
+**8. The brand green fails AA on small text — by 0.12.** `#4f7d10` measures 4.38:1 on the
+surfaces it is used on (badges, pills, price tags, the ticker highlights), and every one of
+those is small text, so AA wants 4.5. Near-misses like this are the ones that survive a
+design review, because nothing looks wrong. Darkened to `#4a7610` — 4.81:1, hue unchanged,
+indistinguishable side by side. Flagging it rather than quietly repainting: the design is
+the spec, and this is the narrow case where the spec is wrong for production.
+
 **Done well, and kept:** the prototype checks `prefers-reduced-motion` before animating.
 That is more than most production themes do. Kept, and extended to everything I added.
 
