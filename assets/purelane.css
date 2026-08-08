@@ -407,9 +407,14 @@
  * `image_tag` emits width and height attributes, so the ratio is known before load. */
 .pl .shot img,
 .pl .card__image{
-  display:block;width:100%;height:100%;
+  display:block;width:100%;height:100%;min-height:0;
   object-fit:contain;margin-inline:auto;
 }
+/* .shot is a 150px box, but its grid row auto-sizes to content — so an oversized image
+ * grew the row to its own height and `height:100%` resolved against that, measuring the
+ * image against itself. Pinning the row to the box makes the percentage mean what it
+ * looks like it means. */
+.pl .card .shot{grid-template-rows:minmax(0,1fr)}
 
 /* A product with no image is a real merchandising state, not an error. */
 .pl .card__image--empty{
