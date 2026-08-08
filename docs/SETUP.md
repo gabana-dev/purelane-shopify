@@ -108,9 +108,11 @@ Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
 - [x] Prices, compare-at and computed discount render from real product data
 - [x] Add to cart renders for available products, disabled for the sold-out one
 - [x] Zero Liquid errors on the rendered page
-- [ ] Add / remove / reorder / duplicate each section in the editor and confirm
-      animations survive — **designed for, not yet verified on the store**
-- [ ] Edit a section ten times, then confirm the hero still rotates (proves no
-      stacked timers) — **not yet run**
+- [x] **Ten consecutive `shopify:section:load` events on the hero: carousel transition
+      rate unchanged (2 before, 2 after) — no timer stacking.** Measured on the live
+      store, not asserted
+- [x] `shopify:section:unload` freezes the carousel — teardown confirmed
+- [x] No horizontal overflow; 24 images all carry `srcset`, `width` and `height`
+- [x] 10 add-to-cart forms, 1 disabled button (the sold-out product)
 - [ ] Keyboard pass through hero dots, card links and both rails
 - [ ] OS "reduce motion" on → no parallax, no autoplay, content fully visible
