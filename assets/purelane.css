@@ -534,12 +534,18 @@
 @media(min-width:901px){
   .pl .hslide{padding-right:104px}
 }
-/* The cap has to tighten as the group grows: three bottles plus their -8% overlaps must
- * still fit the stage once the badge gutter is reserved. Percentages resolve against the
- * stage, so these hold at every width rather than at one tested viewport. */
+/* The cap tightens as the group grows: three bottles plus their -8% overlaps must still
+ * fit the stage once the badge gutter is reserved. One cap per slide would work but would
+ * flatten the size stagger, so each position gets a cap in proportion to the height it is
+ * already given above (75 : 97 : 79) — the tallest bottle stays the widest and the ladder
+ * still reads as a ladder. Percentages resolve against the stage, so this holds at every
+ * width rather than at the one viewport it was checked on. */
 .pl .hs1 .hp{max-width:62%}
-.pl .hs2 .hp{max-width:38%}
-.pl .hs3 .hp{max-width:30%}
+.pl .hs2 .a{max-width:34%}
+.pl .hs2 .b{max-width:42%}
+.pl .hs3 .a{max-width:27%}
+.pl .hs3 .c{max-width:35%}
+.pl .hs3 .b{max-width:29%}
 .pl .hs1 .hp{height:97%}
 .pl .hs2 .a{height:80%;margin-right:-8%;z-index:1}
 .pl .hs2 .b{height:97%;z-index:3}
