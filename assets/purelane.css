@@ -509,12 +509,32 @@
 }
 
 /* Hero bundle slides: 1, 2 or 3 bottles staggered, matching the prototype's
-   .hs2 / .hs3 layering. Real <img> elements need explicit heights because they
-   replaced fixed-ratio CSS backgrounds. */
+   .hs2 / .hs3 layering.
+ *
+ * THE CONSTRAINT THE PROTOTYPE DIDN'T HAVE
+ * The prototype's hero bottles are CSS backgrounds on spans with a fixed
+ * `aspect-ratio:0.322` — tall, narrow art drawn for this stage. Ours are real product
+ * images, because the brief requires the hero to render the merchant's own products, and
+ * a merchant's product photo is whatever shape it is. The seeded art is 257x394 (0.652),
+ * twice as wide per unit of height, so sizing purely by height blew each bottle out to
+ * roughly double the intended width: the group overflowed the stage and the last bottle
+ * slid underneath the promise badges.
+ *
+ * Height still drives the stagger, but each bottle is now also capped by width as a
+ * share of the stage, so art of any aspect stays inside its slot. The reserved gutter
+ * below keeps the group clear of the badges regardless of how many bottles a slide has.
+ */
 .pl .hslide{display:flex;align-items:flex-end;justify-content:center;gap:0}
-.pl .hp{position:relative;flex:0 0 auto;height:92%;display:block}
-.pl .hp img{width:auto;height:100%;object-fit:contain;object-position:bottom center;
+.pl .hp{position:relative;flex:0 0 auto;height:92%;display:block;max-width:46%}
+.pl .hp img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:bottom center;
   filter:drop-shadow(0 14px 22px rgba(0,74,66,.15))}
+/* The badges panel is 96px wide at right:18px and floats over the stage. Reserve that
+ * column so bottles are never hidden behind it. Below 900px the badges are display:none,
+ * so the gutter goes with them. */
+@media(min-width:901px){
+  .pl .hslide{padding-right:104px}
+  .pl .hs1 .hp{max-width:62%}
+}
 .pl .hs1 .hp{height:97%}
 .pl .hs2 .a{height:80%;margin-right:-8%;z-index:1}
 .pl .hs2 .b{height:97%;z-index:3}

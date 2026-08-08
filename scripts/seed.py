@@ -164,6 +164,14 @@ PRODUCTS = [
 ]
 
 COMBOS = [
+    # The hero's middle rung. The prototype's bundle ladder is 1 bottle at 200/299,
+    # "Any 2 products" at 349/598 (save 249) and "Any 3 products" at 499/897 (save 398).
+    # Without a product at 349/598 the hero tier had to borrow the Laundry care set at
+    # 599 — which made two products cost more than three and inverted the whole ladder.
+    # It is seeded as a real product so the hero price still comes from platform data.
+    dict(title="Any 2 products", price="349", compare="598", img="p-combo2",
+         blurb="Pick any two Purelane products at one flat price.",
+         items=[0, 1]),
     dict(title="Kitchen essentials", price="499", compare="897", img="p-combo2",
          blurb="Includes: Foaming Kitchen Cleaner, Dishwash Gel & Tap Cleaner. "
                "Everything for a sparkling kitchen, no need to pick separately.",
