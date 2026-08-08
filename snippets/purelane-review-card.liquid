@@ -1,0 +1,38 @@
+{% comment %}
+  One review card. Extracted so the reviews section can render metaobjects and editor
+  blocks through the same markup — otherwise the two paths drift apart the first time
+  someone edits one of them.
+
+  The star row is decorative; the rating is also exposed as text so a screen reader
+  announces "Rated 5 out of 5" instead of five identical glyphs.
+{% endcomment %}
+
+{%- liquid
+  assign stars = rating | default: 5 | round
+-%}
+
+<div class="st" aria-hidden="true">
+  {%- for i in (1..stars) -%}★{%- endfor -%}
+</div>
+<span class="visually-hidden">Rated {{ stars }} out of 5</span>
+
+{%- if title != blank -%}
+  <h3 class="rcard__title">{{ title }}</h3>
+{%- endif -%}
+
+{%- if body != blank -%}
+  <p>{{ body }}</p>
+{%- endif -%}
+
+<div class="who">
+  {%- comment -%}
+    The prototype drew an avatar as inline SVG per card. A single initial in a circle is
+    the same visual weight, costs no extra markup per card, and avoids repeating a large
+    SVG five times.
+  {%- endcomment -%}
+  <span class="who__avatar" aria-hidden="true">{{ author | slice: 0 | upcase }}</span>
+  <b>{{ author }}</b>
+  {%- if context != blank -%}
+    <span>· {{ context }}</span>
+  {%- endif -%}
+</div>

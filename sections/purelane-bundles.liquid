@@ -1,0 +1,173 @@
+{% comment %}
+  Purelane — build-your-bundle tiers (prototype anchor #bundles)
+
+  Tiers are pricing propositions rather than catalogue items, so each tier block can either
+  point at a real bundle product (price and availability come from the platform) or carry
+  a display price for a tier that is assembled at checkout by an app.
+
+  Preferring the product reference matters: a merchant running a sale should not have to
+  remember to edit the homepage too. The manual price exists only for the case where no
+  product represents the tier yet, and the editor says so.
+{% endcomment %}
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+
+<div class="pl">
+  <section
+    class="sec"
+    id="bundles"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+  >
+    <div class="wrap">
+      <div class="glass sec-pad rv" style="margin-bottom:16px">
+        <div class="panel-head" style="margin-bottom:0">
+          {%- if section.settings.kicker != blank -%}
+            <span class="kicker">{{ section.settings.kicker }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.lede != blank -%}
+            <p class="lede" style="margin:0 auto">{{ section.settings.lede }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="tiers">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign tier_product = all_products[block.settings.product]
+
+              # Platform price wins; the manual setting is only a fallback.
+              if tier_product != blank
+                assign tier_price = tier_product.price
+                assign tier_compare = tier_product.compare_at_price
+              else
+                assign tier_price = block.settings.price
+                assign tier_compare = block.settings.compare_at_price
+              endif
+
+              assign qty = block.settings.quantity
+              assign per_unit = 0
+              if qty > 0
+                assign per_unit = tier_price | divided_by: qty
+              endif
+
+              assign delay = ''
+              if forloop.index == 2
+                assign delay = 'rv-d2'
+              elsif forloop.index == 3
+                assign delay = 'rv-d3'
+              endif
+            -%}
+
+            <article
+              class="glass tier rv {{ delay }} {% if block.settings.highlight %}best{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.tag != blank -%}
+                <span class="tag">{{ block.settings.tag }}</span>
+              {%- endif -%}
+
+              {%- if tier_product.featured_image -%}
+                <div class="tierpix" aria-hidden="true">
+                  {{
+                    tier_product.featured_image
+                    | image_url: width: 320
+                    | image_tag:
+                      loading: 'lazy', decoding: 'async',
+                      widths: '120,180,240,320', sizes: '140px',
+                      alt: ''
+                  }}
+                </div>
+              {%- endif -%}
+
+              <div class="qty">{{ qty }}<small>Products</small></div>
+
+              <div class="price">
+                {{ tier_price | money }}
+                {%- if tier_compare > tier_price -%}
+                  <s>{{ tier_compare | money }}</s>
+                {%- endif -%}
+              </div>
+
+              {%- if per_unit > 0 -%}
+                <p class="body-s" style="font-size:12px">Flat {{ per_unit | money }} per product</p>
+              {%- endif -%}
+
+              {%- if block.settings.features != blank -%}
+                <ul>
+                  {%- assign features = block.settings.features | newline_to_br | split: '<br />' -%}
+                  {%- for feature in features -%}
+                    {%- assign line = feature | strip -%}
+                    {%- if line != blank -%}
+                      <li>{% render 'purelane-icon', icon: 'check' %}{{ line }}</li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              <a class="btn btn-ghost" href="{{ block.settings.link | default: '#shop' }}">
+                {{ block.settings.cta | default: 'Build this box' }}
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        <p class="lede">Add a tier block to show bundle pricing here.</p>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane bundles",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One box. Every room." },
+    {
+      "type": "textarea", "id": "lede", "label": "Intro paragraph",
+      "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Tier",
+      "settings": [
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Starter" },
+        {
+          "type": "product", "id": "product", "label": "Bundle product",
+          "info": "Preferred. Price and availability then come from Shopify."
+        },
+        { "type": "range", "id": "quantity", "label": "Products in tier", "min": 1, "max": 12, "step": 1, "default": 2 },
+        {
+          "type": "text", "id": "price", "label": "Display price (fallback)",
+          "info": "Used only when no bundle product is selected. In cents, e.g. 34900."
+        },
+        { "type": "text", "id": "compare_at_price", "label": "Compare-at price (fallback)" },
+        { "type": "textarea", "id": "features", "label": "Features", "info": "One per line", "default": "Pick any two products\nFree shipping across India" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight this tier", "default": false },
+        { "type": "text", "id": "cta", "label": "Button label", "default": "Build this box" },
+        { "type": "url", "id": "link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane bundles",
+      "blocks": [
+        { "type": "tier", "settings": { "tag": "Starter", "quantity": 2 } },
+        { "type": "tier", "settings": { "tag": "Most popular", "quantity": 3, "highlight": true } },
+        { "type": "tier", "settings": { "tag": "Best value", "quantity": 5 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

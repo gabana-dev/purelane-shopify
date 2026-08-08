@@ -1,0 +1,164 @@
+{% comment %}
+  Purelane — best-selling combos (prototype anchor #combos)
+
+  A combo is a real Shopify product that happens to bundle others. The products shown
+  stacked in the tray come from the combo's own `custom.combo_items` metafield (a product
+  list), so merchandising decides what a combo contains — not Liquid.
+
+  "You save ₹398" is computed from the combo's compare-at price. It is never typed, so it
+  can never drift out of sync with the actual price.
+{% endcomment %}
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+
+<div class="pl">
+  <section
+    class="sec"
+    id="combos"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+  >
+    <div class="wrap">
+      <div class="panel-head rv">
+        {%- if section.settings.kicker != blank -%}
+          <span class="kicker">{{ section.settings.kicker }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        <div class="rule" aria-hidden="true">
+          <i></i>{% render 'purelane-icon', icon: 'leaf' %}<i></i>
+        </div>
+        {%- if section.settings.lede != blank -%}
+          <p class="lede" style="margin:14px auto 0">{{ section.settings.lede }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        {%- comment -%}
+          A horizontally scrolling rail. It is a real scroll container rather than a JS
+          carousel: it works without JavaScript, it is keyboard-scrollable, and it costs
+          nothing in main-thread time.
+        {%- endcomment -%}
+        <div class="comborail rv" tabindex="0" role="group" aria-label="{{ section.settings.heading | escape }}">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign combo = all_products[block.settings.product]
+              assign items = combo.metafields.custom.combo_items.value
+              assign blurb = combo.metafields.custom.combo_blurb.value
+
+              assign on_sale = false
+              if combo.compare_at_price > combo.price
+                assign on_sale = true
+                assign saving = combo.compare_at_price | minus: combo.price
+                assign discount = saving | times: 100.0 | divided_by: combo.compare_at_price | round
+              endif
+            -%}
+
+            {%- if combo != blank -%}
+              <article class="glass combo" {{ block.shopify_attributes }}>
+                <div class="tray">
+                  {%- if on_sale -%}
+                    <span class="save">You save {{ saving | money }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.flag != blank -%}
+                    <span class="flag">{{ block.settings.flag }}</span>
+                  {%- endif -%}
+
+                  <div class="stack">
+                    {%- for item in items -%}
+                      <span class="it">
+                        {%- if item.featured_image -%}
+                          {{
+                            item.featured_image
+                            | image_url: width: 240
+                            | image_tag:
+                              loading: 'lazy', decoding: 'async',
+                              widths: '80,120,160,240', sizes: '90px',
+                              alt: item.title
+                          }}
+                        {%- endif -%}
+                        <span>{{ item.metafields.custom.combo_blurb.value | default: item.title }}</span>
+                      </span>
+                      {%- unless forloop.last -%}
+                        <span class="plus" aria-hidden="true">+</span>
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+
+                <div class="body">
+                  <h3><a href="{{ combo.url }}">{{ combo.title }}</a></h3>
+                  <div class="cnt">{{ items.count | default: 0 }} products</div>
+                  {%- if blurb != blank -%}
+                    <p class="inc">{{ blurb }}</p>
+                  {%- endif -%}
+
+                  <div class="prow">
+                    <strong>{{ combo.price | money }}</strong>
+                    {%- if on_sale -%}
+                      <s>{{ combo.compare_at_price | money }}</s>
+                      <em>{{ discount }}% off</em>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if combo.available -%}
+                    {%- form 'product', combo -%}
+                      <input type="hidden" name="id" value="{{ combo.selected_or_first_available_variant.id }}">
+                      <button class="btn btn-ghost btn-sm" type="submit" name="add">
+                        Add combo to cart
+                        <span class="visually-hidden">— {{ combo.title | escape }}</span>
+                      </button>
+                    {%- endform -%}
+                  {%- else -%}
+                    <button class="btn btn-ghost btn-sm" type="button" disabled aria-disabled="true">
+                      Sold out
+                    </button>
+                  {%- endif -%}
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        <p class="lede">Add a combo block and pick a product to show it here.</p>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane combos",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Pre-built to save you money" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best selling combos" },
+    {
+      "type": "textarea", "id": "lede", "label": "Intro paragraph",
+      "default": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo",
+      "settings": [
+        {
+          "type": "product", "id": "product", "label": "Combo product",
+          "info": "Set what's inside it on the product's custom.combo_items metafield."
+        },
+        { "type": "text", "id": "flag", "label": "Flag", "info": "e.g. Most popular" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane combos",
+      "blocks": [{ "type": "combo" }, { "type": "combo" }, { "type": "combo" }]
+    }
+  ]
+}
+{% endschema %}

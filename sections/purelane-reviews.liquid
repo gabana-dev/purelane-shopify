@@ -1,0 +1,112 @@
+{% comment %}
+  Purelane — reviews rail (prototype anchor #reviews)
+
+  Reviews are a `review` metaobject, so marketing adds one in admin without touching code
+  and without a developer deploying a theme change. That is the honest answer to the
+  brief's "where a native field doesn't exist, solve it properly": Shopify has no native
+  testimonial object, and hardcoding five <article> blocks into Liquid would fail the
+  merchant-editable requirement outright.
+
+  The rail is a CSS scroll container, not a JS carousel. It works without JavaScript,
+  scrolls with a trackpad, drag or keyboard, and costs nothing on the main thread.
+{% endcomment %}
+
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign reviews = section.settings.reviews.value
+  # Fall back to blocks so the section still works before any metaobject exists.
+  assign use_blocks = false
+  if reviews == blank or reviews.count == 0
+    assign use_blocks = true
+  endif
+-%}
+
+<div class="pl">
+  <section
+    class="sec revband"
+    id="reviews"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+  >
+    <div class="wrap">
+      <div class="revhead rv">
+        {%- if section.settings.kicker != blank -%}
+          <span class="kicker">{{ section.settings.kicker }}</span>
+        {%- endif -%}
+        {%- if section.settings.aggregate_rating != blank -%}
+          <span class="agg">
+            <span class="st" aria-hidden="true">★★★★★</span>
+            <b>{{ section.settings.aggregate_rating }}</b>
+            {{ section.settings.aggregate_label }}
+          </span>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank -%}
+          <span class="agg">{{ section.settings.secondary_label }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="revrail rv" tabindex="0" role="group" aria-label="Customer reviews">
+      <div class="revtrack">
+        {%- if use_blocks -%}
+          {%- for block in section.blocks -%}
+            <article class="glass-2 rcard" {{ block.shopify_attributes }}>
+              {%- render 'purelane-review-card',
+                    rating: block.settings.rating,
+                    title: block.settings.title,
+                    body: block.settings.body,
+                    author: block.settings.author,
+                    context: block.settings.context -%}
+            </article>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for review in reviews -%}
+            <article class="glass-2 rcard">
+              {%- render 'purelane-review-card',
+                    rating: review.rating,
+                    title: review.title,
+                    body: review.body,
+                    author: review.author,
+                    context: review.context -%}
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane reviews",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "That's what they said" },
+    { "type": "text", "id": "aggregate_rating", "label": "Aggregate rating", "default": "4.8" },
+    { "type": "text", "id": "aggregate_label", "label": "Aggregate label", "default": "from 8,000+ reviews" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary stat", "default": "Loved by 12 lakh+ homes" },
+    {
+      "type": "metaobject_list", "id": "reviews", "metaobject_type": "review",
+      "label": "Reviews",
+      "info": "Add reviews in Content > Metaobjects. Falls back to the blocks below if empty."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review (fallback)",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Review" },
+        { "type": "text", "id": "author", "label": "Author" },
+        { "type": "text", "id": "context", "label": "Product context" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Purelane reviews" }]
+}
+{% endschema %}
