@@ -754,3 +754,38 @@
  * ------------------------------------------------------------------------- */
 .pl .card{background:var(--g-bg);font-size:inherit}
 .pl .price{display:block;font-size:inherit;letter-spacing:inherit;color:inherit}
+
+/* ---------------------------------------------------------------------------
+ * Signup and footer (bonus sections).
+ * Values ported from the prototype, including its light-theme overrides — the same
+ * double-definition trap as :root and .glass-2, so both passes are merged here.
+ * ------------------------------------------------------------------------- */
+.pl .signup{padding:clamp(28px,4vw,46px);text-align:center}
+.pl .signup .signup-form{display:flex;gap:9px;max-width:430px;margin:22px auto 0;flex-wrap:wrap}
+.pl .signup input[type="email"]{
+  flex:1;min-width:180px;height:46px;padding:0 18px;border-radius:999px;
+  font-size:14px;font-family:inherit;
+  background:rgba(255,255,255,.72);border:1px solid rgba(75,58,143,.20);color:#01423b}
+.pl .signup input[type="email"]::placeholder{color:var(--paper-3)}
+.pl .signup-msg{flex:0 0 100%;margin-top:10px;font-size:13px;color:var(--paper-2)}
+.pl .signup-msg--error{color:#8c2f1d}
+
+.pl footer{position:relative;z-index:2;margin-top:var(--sec-y);padding:44px 0 30px;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(214,241,221,.90));
+  border-top:1px solid rgba(75,58,143,.13)}
+.pl .fgrid{display:grid;gap:28px;grid-template-columns:1fr}
+@media(min-width:760px){.pl .fgrid{grid-template-columns:1.3fr 1fr 1fr 1fr}}
+.pl .fh{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--leaf);margin-bottom:14px}
+.pl .flist{list-style:none}
+.pl .flist li{margin-bottom:9px}
+.pl .flist a,.pl .fblurb{display:block;font-size:13.5px;color:var(--paper-2);transition:.25s}
+.pl .flist a:hover{color:var(--surface)}
+.pl .fbrand{margin-bottom:16px}
+.pl .fblurb{max-width:30ch}
+.pl .flegal{font-size:12px;color:var(--paper-3);margin-top:9px}
+.pl .fbot{margin-top:32px;padding-top:20px;border-top:1px solid rgba(75,58,143,.11);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:11.5px;color:var(--paper-3)}
+.pl .fpolicy a{transition:.25s}
+.pl .fpolicy a:hover{color:var(--surface)}
+@media(max-width:760px){.pl footer{padding:34px 0 24px}}

@@ -1,0 +1,94 @@
+{% comment %}
+  Purelane — email signup (prototype's SIGNUP section, bonus)
+
+  The prototype's form is `<form onsubmit="return false">` — it looks like a signup and
+  discards the address. This is a real `{% form 'customer' %}`, which is how Shopify
+  captures a subscriber: it creates the customer, tags them `newsletter` so the merchant
+  can segment on it, and works with no JavaScript. Success and error states come from
+  Shopify rather than being invented here.
+{% endcomment %}
+
+{% render 'purelane-assets' %}
+
+<div class="pl">
+  <section
+    class="sec tone-{{ section.settings.tone | default: '4' }}"
+    data-purelane-section
+    data-section-id="{{ section.id }}"
+  >
+    <div class="wrap">
+      <div class="glass signup rv">
+        {%- if section.settings.kicker != blank -%}
+          <span class="kicker">{{ section.settings.kicker }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="d2 panel-h">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.lede != blank -%}
+          <p class="lede panel-lede panel-lede--flush">{{ section.settings.lede }}</p>
+        {%- endif -%}
+
+        {%- form 'customer', id: 'purelane-signup', class: 'signup-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="visually-hidden" for="signup-{{ section.id }}">
+            {{ 'newsletter.label' | t | default: 'Email address' }}
+          </label>
+          <input
+            id="signup-{{ section.id }}"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email }}"
+            placeholder="{{ section.settings.placeholder | default: 'your@email.com' }}"
+            autocomplete="email"
+            required
+            {% if form.errors %}aria-invalid="true" aria-describedby="signup-error-{{ section.id }}"{% endif %}
+          >
+          <button class="btn btn-primary" type="submit">
+            {{ section.settings.cta | default: 'Get my ₹100 off' }}
+          </button>
+
+          {%- if form.errors -%}
+            <p class="signup-msg signup-msg--error" id="signup-error-{{ section.id }}" role="alert">
+              {{ form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email }}
+            </p>
+          {%- elsif form.posted_successfully? -%}
+            <p class="signup-msg" role="status">
+              {{ section.settings.success | default: 'Thanks — check your inbox for the code.' }}
+            </p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane signup",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Join the Purelane Club" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get ₹100 off your first bundle" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Plus first access to new launches and restocks." },
+    { "type": "text", "id": "placeholder", "label": "Field placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "cta", "label": "Button label", "default": "Get my ₹100 off" },
+    { "type": "text", "id": "success", "label": "Success message", "default": "Thanks — check your inbox for the code." },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "info": "Matches the prototype's scroll gradient. 1 is lightest, 4 deepest.",
+      "options": [
+        { "value": "1", "label": "1 — lightest" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4 — deepest" }
+      ],
+      "default": "4"
+    }
+  ],
+  "presets": [{ "name": "Purelane signup" }]
+}
+{% endschema %}

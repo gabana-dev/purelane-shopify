@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "purelane_hero": {
@@ -245,6 +236,59 @@
         "tagline": "Clean, simply",
         "menu": "main-menu"
       }
+    },
+    "purelane_signup": {
+      "type": "purelane-signup",
+      "settings": {
+        "kicker": "Join the Purelane Club",
+        "heading": "Get ₹100 off your first bundle",
+        "lede": "Plus first access to new launches and restocks.",
+        "placeholder": "your@email.com",
+        "cta": "Get my ₹100 off",
+        "success": "Thanks — check your inbox for the code.",
+        "tone": "4"
+      }
+    },
+    "purelane_footer": {
+      "type": "purelane-footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "about": {
+          "type": "menu",
+          "settings": {
+            "heading": "About",
+            "menu": "footer"
+          }
+        },
+        "contact": {
+          "type": "contact",
+          "settings": {
+            "heading": "Get in touch",
+            "email": "hello@purelane.com",
+            "phone": "+91 9930 123 234",
+            "legal_name": "Purelane Eco Products Pvt Ltd"
+          }
+        }
+      },
+      "block_order": [
+        "shop",
+        "about",
+        "contact"
+      ],
+      "settings": {
+        "brand_name": "Purelane",
+        "brand_tagline": "Clean, simply",
+        "blurb": "Effective cleaning, powered by nature. Made for Indian homes since day one.",
+        "legal": "Purelane Eco Products Private Limited",
+        "policy_menu": "footer",
+        "tone": "4"
+      }
     }
   },
   "order": [
@@ -253,6 +297,8 @@
     "purelane_reviews",
     "purelane_combos",
     "purelane_bundles",
-    "purelane_shop"
+    "purelane_shop",
+    "purelane_signup",
+    "purelane_footer"
   ]
 }

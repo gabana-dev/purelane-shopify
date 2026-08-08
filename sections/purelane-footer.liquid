@@ -1,0 +1,156 @@
+{% comment %}
+  Purelane — footer (bonus)
+
+  The prototype hardcodes four columns of links. Here each column is a block with a menu
+  picker, so the link lists come from Shopify Navigation: marketing adds a link in admin
+  and it appears here, in the header, and anywhere else that menu is used. Hardcoding
+  eighteen anchors would fail the merchant-editable requirement in the most ordinary way
+  a client actually hits it.
+
+  The contact column is separate because it is addresses and phone numbers rather than a
+  menu, and forcing that into a link list would be worse for the merchant, not better.
+{% endcomment %}
+
+{% render 'purelane-assets' %}
+
+<div class="pl">
+  <footer class="tone-{{ section.settings.tone | default: '4' }}" data-purelane-section data-section-id="{{ section.id }}">
+    <div class="wrap">
+      <div class="fgrid">
+        <div class="fcol">
+          <a class="brand fbrand" href="{{ routes.root_url }}">
+            <span class="mark">{% render 'purelane-icon', icon: 'leaf' %}</span>
+            <span class="txt">
+              <span class="n1">{{ section.settings.brand_name | default: shop.name }}</span>
+              {%- if section.settings.brand_tagline != blank -%}
+                <span class="n2">{{ section.settings.brand_tagline }}</span>
+              {%- endif -%}
+            </span>
+          </a>
+          {%- if section.settings.blurb != blank -%}
+            <p class="fblurb">{{ section.settings.blurb }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <div class="fcol" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="fh">{{ block.settings.heading }}</h2>
+                {%- endif -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul class="flist">
+                    {%- for link in block.settings.menu.links -%}
+                      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- elsif request.design_mode -%}
+                  <p class="fblurb">Pick a menu for this column.</p>
+                {%- endif -%}
+              </div>
+
+            {%- when 'contact' -%}
+              <div class="fcol" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="fh">{{ block.settings.heading }}</h2>
+                {%- endif -%}
+                <ul class="flist">
+                  {%- if block.settings.email != blank -%}
+                    <li><a href="mailto:{{ block.settings.email }}">{{ block.settings.email }}</a></li>
+                  {%- endif -%}
+                  {%- if block.settings.phone != blank -%}
+                    <li>
+                      <a href="tel:{{ block.settings.phone | remove: ' ' | remove: '-' }}">
+                        {{- block.settings.phone -}}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+                {%- if block.settings.legal_name != blank -%}
+                  <p class="flegal">{{ block.settings.legal_name }}</p>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="fbot">
+        <span>
+          &copy; {{ 'now' | date: '%Y' }} {{ section.settings.legal | default: shop.name }}
+        </span>
+        {%- if section.settings.policy_menu != blank -%}
+          <span class="fpolicy">
+            {%- for link in section.settings.policy_menu.links -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+              {%- unless forloop.last %} &middot; {% endunless -%}
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+  </footer>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane footer",
+  "tag": "section",
+  "class": "purelane-section",
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Purelane" },
+    { "type": "text", "id": "brand_tagline", "label": "Brand tagline", "default": "Clean, simply" },
+    {
+      "type": "textarea",
+      "id": "blurb",
+      "label": "Blurb",
+      "default": "Effective cleaning, powered by nature. Made for Indian homes since day one."
+    },
+    { "type": "text", "id": "legal", "label": "Copyright line", "default": "Purelane Eco Products Private Limited" },
+    { "type": "link_list", "id": "policy_menu", "label": "Policy menu", "info": "Privacy, terms, refunds." },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background tone",
+      "options": [
+        { "value": "1", "label": "1 — lightest" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4 — deepest" }
+      ],
+      "default": "4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact column",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Get in touch" },
+        { "type": "text", "id": "email", "label": "Email", "default": "hello@purelane.com" },
+        { "type": "text", "id": "phone", "label": "Phone", "default": "+91 9930 123 234" },
+        { "type": "text", "id": "legal_name", "label": "Legal name", "default": "Purelane Eco Products Pvt Ltd" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane footer",
+      "blocks": [
+        { "type": "menu" },
+        { "type": "menu" },
+        { "type": "contact" }
+      ]
+    }
+  ]
+}
+{% endschema %}

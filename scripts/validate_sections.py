@@ -16,6 +16,26 @@ import sys
 
 BLOCK_TAGS = ("if", "for", "form", "unless", "case", "capture", "comment", "paginate")
 
+COMMENT_RE = re.compile(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", re.S)
+
+
+def balance_failures(path, source):
+    """Tag balance, ignoring anything inside a {% comment %} block.
+
+    Liquid does not execute commented tags, so neither should this. Without the strip, a
+    doc comment that mentions {% form %} by name reads as an unclosed tag — which is a
+    false positive that trains you to ignore your own checker.
+    """
+    body = COMMENT_RE.sub("", source)
+    out = []
+    for tag in BLOCK_TAGS:
+        opened = len(re.findall(r"\{%-?\s*" + tag + r"[\s%]", body))
+        closed = len(re.findall(r"\{%-?\s*end" + tag + r"\s*-?%\}", body))
+        if opened != closed:
+            out.append(f"{path}: {tag} unbalanced — {opened} open, {closed} closed")
+    return out
+
+
 failures = []
 
 for path in sorted(glob.glob("sections/purelane-*.liquid")):
@@ -32,21 +52,13 @@ for path in sorted(glob.glob("sections/purelane-*.liquid")):
         except json.JSONDecodeError as err:
             failures.append(f"{path}: schema is not valid JSON — {err}")
 
-    for tag in BLOCK_TAGS:
-        opened = len(re.findall(r"\{%-?\s*" + tag + r"[\s%]", source))
-        closed = len(re.findall(r"\{%-?\s*end" + tag + r"\s*-?%\}", source))
-        if opened != closed:
-            failures.append(f"{path}: {tag} unbalanced — {opened} open, {closed} closed")
+    failures.extend(balance_failures(path, source))
 
     print(f"checked {path}")
 
 for path in sorted(glob.glob("snippets/purelane-*.liquid")):
     source = open(path, encoding="utf-8").read()
-    for tag in BLOCK_TAGS:
-        opened = len(re.findall(r"\{%-?\s*" + tag + r"[\s%]", source))
-        closed = len(re.findall(r"\{%-?\s*end" + tag + r"\s*-?%\}", source))
-        if opened != closed:
-            failures.append(f"{path}: {tag} unbalanced — {opened} open, {closed} closed")
+    failures.extend(balance_failures(path, source))
     print(f"checked {path}")
 
 if failures:
