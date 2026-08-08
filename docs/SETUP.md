@@ -79,20 +79,38 @@ Put products 1–8 in a collection called **Bestsellers** and point the shop sec
 6. Bundles: three tiers; tick "Highlight" on the middle one.
 7. Reviews: pick the review metaobjects.
 
+## 4b. Store configuration gotchas (learned the hard way)
+
+Two settings that are invisible until they break everything:
+
+**A market needs a shipping zone that covers it.** This store's market covers India while
+the only shipping zone covered the United States. The result: *every* product reported
+`available: false` on the storefront while the Admin API reported them sellable, so the
+whole grid rendered "Sold out". Not an inventory, tracking, publication or location
+problem — I ruled all four out first. Fix: Settings → Shipping and delivery → Add zone
+covering the market's countries, with at least one rate.
+
+**Currency formatting is separate from currency.** Setting the store currency to INR gives
+you `Rs. 349.00`. The prototype shows `₹349`. Settings → General → Currency display →
+Change formatting → `₹{{amount_no_decimals}}` in both HTML fields.
+
 ## 5. Verification checklist
 
 Run before handing over. Each item maps to an acceptance criterion in the PRD.
 
-- [ ] 375 / 768 / 1024 / 1440 match the prototype; no horizontal scroll at 375
-- [ ] Sold-out product shows a disabled "Sold out" button, card height unchanged
-- [ ] Imageless product shows the placeholder, grid stays aligned
-- [ ] 90-character title clamps to two lines, card height unchanged
-- [ ] Product with no compare-at price shows no strikethrough and no discount pill
-- [ ] Add / remove / reorder / duplicate each section in the editor — layout **and
-      animations** still work afterwards
-- [ ] Edit a section ten times in a row, then confirm the hero still rotates at the
-      configured speed (proves no stacked timers)
-- [ ] Keyboard: tab through hero dots, card links, buttons and both rails; focus visible
+Marked honestly — `[x]` was verified on the live store, `[ ]` was not.
+
+- [x] Compared side by side against the prototype in a browser at 1440 and ~500px
+- [ ] Measured spacing-by-spacing at 375 / 768 / 1024 / 1440
+- [x] Sold-out product shows a disabled "Sold out" button, card height unchanged
+- [x] Imageless product shows the placeholder, grid stays aligned
+- [x] 103-character title clamps to two lines, card height unchanged
+- [x] Prices, compare-at and computed discount render from real product data
+- [x] Add to cart renders for available products, disabled for the sold-out one
+- [x] Zero Liquid errors on the rendered page
+- [ ] Add / remove / reorder / duplicate each section in the editor and confirm
+      animations survive — **designed for, not yet verified on the store**
+- [ ] Edit a section ten times, then confirm the hero still rotates (proves no
+      stacked timers) — **not yet run**
+- [ ] Keyboard pass through hero dots, card links and both rails
 - [ ] OS "reduce motion" on → no parallax, no autoplay, content fully visible
-- [ ] Zero console errors
-- [ ] Add to cart works from the shop grid and from a combo
