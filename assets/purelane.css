@@ -503,3 +503,23 @@
 .pl .hs3 .a{height:75%;margin-right:-8%;z-index:1;order:1}
 .pl .hs3 .c{height:97%;z-index:3;order:2}
 .pl .hs3 .b{height:79%;margin-left:-8%;z-index:2;order:3}
+
+/* Price-tag rules restored from the prototype. `.ptag` was missing from the
+ * extraction keep-list, so the hero's bundle price card rendered unstyled and in
+ * the wrong place. Values copied verbatim rather than re-guessed. */
+.pl .hs1 .a{height:100%;z-index:3}
+.pl .ptag{position:absolute;left:0;bottom:2%;z-index:6;padding:11px 14px 12px;border-radius:16px;max-width:52%;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .8s var(--ease) .62s,transform .8s var(--ease) .62s}
+.pl .hslide.on .ptag{opacity:1;transform:none}
+.pl .ptag .lbl{display:block;font-size:9px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--accent)}
+.pl .ptag .val{display:flex;align-items:baseline;gap:7px;margin-top:5px}
+.pl .ptag .val strong{font-family:'Outfit',sans-serif;font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--surface);line-height:1}
+.pl .ptag .val s{font-size:12px;color:var(--paper-3)}
+.pl .ptag .cut{display:inline-block;margin-top:7px;font-size:8.4px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;background:rgba(240,160,60,.20);border:1px solid rgba(240,160,60,.38);color:var(--accent)}
+.pl .ptag .cut{background:rgba(201,118,29,.16);border:1px solid rgba(201,118,29,.36);color:#4f7d10}
+@media(max-width:900px){
+  .pl .ptag{padding:9px 12px 10px;border-radius:14px;max-width:58%}
+  .pl .ptag .val strong{font-size:20px}
+}
