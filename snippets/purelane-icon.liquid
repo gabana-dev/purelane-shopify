@@ -1,0 +1,39 @@
+{% comment %}
+  Purelane icons.
+
+  The prototype repeated the same inline SVG up to 55 times (the 24x24 leaf alone). That
+  is bytes on every page load and duplicate DOM ids where the SVGs carry gradients. One
+  snippet, called by name, keeps the markup honest and lets the browser cache the CSS
+  that styles them.
+
+  All icons are decorative: they sit next to text that already carries the meaning, so
+  they are aria-hidden and focusable="false" rather than being given labels that a screen
+  reader would read twice.
+
+  Usage: {% render 'purelane-icon', icon: 'leaf' %}
+{% endcomment %}
+
+{%- liquid
+  assign size = size | default: 24
+-%}
+
+<svg class="pl-icon pl-icon--{{ icon }}" viewBox="0 0 24 24" width="{{ size }}" height="{{ size }}"
+     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+     stroke-linejoin="round" aria-hidden="true" focusable="false">
+  {%- case icon -%}
+    {%- when 'leaf' -%}
+      <path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/>
+      <path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/>
+    {%- when 'shield' -%}
+      <path d="M12 3 4.5 6v6.2c0 4.3 3.1 7.6 7.5 8.8 4.4-1.2 7.5-4.5 7.5-8.8V6L12 3Z"/>
+      <path d="m9 12 2.2 2.2L15.4 10"/>
+    {%- when 'no-chemicals' -%}
+      <circle cx="12" cy="12" r="8.4"/>
+      <path d="M6.4 17.6 17.6 6.4"/>
+    {%- when 'check' -%}
+      <path d="m5 12.5 4.5 4.5L19 7.5"/>
+    {%- when 'truck' -%}
+      <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/>
+      <circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/>
+  {%- endcase -%}
+</svg>

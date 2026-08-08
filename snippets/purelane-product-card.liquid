@@ -1,0 +1,132 @@
+{% comment %}
+  Purelane product card — the one card used by the shop grid, the combos rail and the
+  bundle tiers. The brief notes that several sections render similar cards, so there is
+  one implementation with a variant switch rather than three near-identical copies.
+
+  Accepts:
+    product      {Object}  required. A Shopify product.
+    variant      {String}  'shop' (default) | 'combo' | 'tier'
+    show_rating  {Boolean} default true
+    show_badge   {Boolean} default true
+    index        {Number}  position in the grid, used only to stagger the reveal
+    heading_tag  {String}  h3 by default; callers set it to keep heading order sane
+
+  Everything shown here is platform data or a metafield. Nothing is hardcoded: prices,
+  savings and the discount percentage are computed from compare_at_price, so a merchant
+  changing a price in admin updates the card with no developer involved.
+
+  Edge cases handled deliberately, because the brief asks for a store seeded with them:
+    - sold out            -> disabled button, card keeps its height
+    - no image            -> placeholder at the same aspect ratio, never a collapsed card
+    - very long title     -> clamped to two lines, full text still available to AT
+    - no compare-at price -> strikethrough and discount pill are omitted, not left empty
+    - no rating metafield -> rating row omitted rather than rendering "0.0"
+{% endcomment %}
+
+{%- liquid
+  assign variant = variant | default: 'shop'
+  assign heading_tag = heading_tag | default: 'h3'
+  if show_rating == nil
+    assign show_rating = true
+  endif
+  if show_badge == nil
+    assign show_badge = true
+  endif
+
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+  assign badge = product.metafields.custom.badge.value
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign saving = product.compare_at_price | minus: product.price
+    assign discount = saving | times: 100.0 | divided_by: product.compare_at_price | round
+  endif
+
+  assign delay_class = ''
+  case index
+    when 1
+      assign delay_class = 'rv-d1'
+    when 2
+      assign delay_class = 'rv-d2'
+    when 3
+      assign delay_class = 'rv-d3'
+  endcase
+-%}
+
+<article class="glass card rv {{ delay_class }} card--{{ variant }}">
+  <a class="card__link" href="{{ product.url }}">
+    <div class="shot">
+      {%- if show_badge and badge != blank -%}
+        <span class="pill">{{ badge }}</span>
+      {%- endif -%}
+
+      {%- if product.featured_image -%}
+        {{
+          product.featured_image
+          | image_url: width: 600
+          | image_tag:
+            loading: 'lazy',
+            decoding: 'async',
+            widths: '200,300,400,600',
+            sizes: '(min-width: 1024px) 280px, 45vw',
+            alt: product.featured_image.alt | default: product.title,
+            class: 'card__image'
+        }}
+      {%- else -%}
+        {%- comment -%}
+          No image is a real merchandising state, not an error. A fixed-ratio placeholder
+          keeps the grid aligned and prevents layout shift.
+        {%- endcomment -%}
+        <span class="card__image card__image--empty" role="img"
+              aria-label="{{ product.title | escape }} — image coming soon">
+          {%- render 'purelane-icon', icon: 'leaf' -%}
+        </span>
+      {%- endif -%}
+    </div>
+
+    <{{ heading_tag }} class="card__title" title="{{ product.title | escape }}">
+      {{- product.title -}}
+    </{{ heading_tag }}>
+  </a>
+
+  {%- if show_rating and rating != blank -%}
+    <div class="rate">
+      <b aria-hidden="true">★ {{ rating.rating | round: 1 }}</b>
+      <span class="visually-hidden">
+        Rated {{ rating.rating | round: 1 }} out of {{ rating.scale_max }}
+      </span>
+      {%- if rating_count > 0 -%}
+        · {{ rating_count }} {{ rating_count | pluralize: 'review', 'reviews' }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="pr">
+    <strong>{{ product.price | money }}</strong>
+    {%- if on_sale -%}
+      <s>{{ product.compare_at_price | money }}</s>
+      <em>{{ discount }}% off</em>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%}
+    A real form, not the prototype's decorative <button>. Posting to /cart/add means the
+    card works with Dawn's cart drawer and with JavaScript disabled.
+  {%- endcomment -%}
+  {%- if product.available -%}
+    {%- form 'product', product, class: 'card__form' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button class="btn btn-ghost btn-sm" type="submit" name="add">
+        Add to cart
+        <span class="visually-hidden">— {{ product.title | escape }}</span>
+      </button>
+    {%- endform -%}
+  {%- else -%}
+    <button class="btn btn-ghost btn-sm" type="button" disabled aria-disabled="true">
+      Sold out
+      <span class="visually-hidden">— {{ product.title | escape }}</span>
+    </button>
+  {%- endif -%}
+</article>
