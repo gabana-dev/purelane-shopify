@@ -118,7 +118,7 @@ because it is the failure mode of accessibility work done rule-by-rule: each rul
 satisfied and the outcome was still worse.
 
 **The lifecycle design was right and the include strategy defeated it.** Found in the final
-review pass, and the most instructive of the four. `snippets/purelane-assets.liquid` is
+review pass, and the most instructive of them. `snippets/purelane-assets.liquid` is
 rendered by *every* Purelane section so the sections stay self-contained and drop into any
 template without editing `theme.liquid`. The browser fetches `purelane.js` once — but it
 executes the IIFE once per `<script>` tag, six times on this homepage. Each execution kept
